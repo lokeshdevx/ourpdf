@@ -2,12 +2,20 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* One bundled UI typeface, so the site looks the same on every device (system-ui follows the user's device font, which can be decorative). */
+@font-face { font-family: 'Inter UI'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/inter-400-normal.woff') format('woff'); }
+@font-face { font-family: 'Inter UI'; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/inter-500-normal.woff') format('woff'); }
+@font-face { font-family: 'Inter UI'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/inter-600-normal.woff') format('woff'); }
+@font-face { font-family: 'Inter UI'; font-style: normal; font-weight: 700; font-display: swap; src: url('/fonts/inter-700-normal.woff') format('woff'); }
+@font-face { font-family: 'Inter UI'; font-style: normal; font-weight: 800; font-display: swap; src: url('/fonts/inter-800-normal.woff') format('woff'); }
+@font-face { font-family: 'Inter UI'; font-style: normal; font-weight: 900; font-display: swap; src: url('/fonts/inter-900-normal.woff') format('woff'); }
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  --font-sans: 'Inter UI', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);

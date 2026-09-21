@@ -152,7 +152,7 @@ export function Ribbon() {
       {/* scroll cue: the tool row scrolls sideways on narrow screens */}
       <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-background via-background/80 to-transparent lg:hidden" aria-hidden />
       </div>
-      <OptionsBar tool={tool} sticky={sticky} />
+      {docId && <OptionsBar tool={tool} sticky={sticky} />}
     </div>
   )
 }

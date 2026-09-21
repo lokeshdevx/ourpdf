@@ -15,6 +15,18 @@ const LINKS = [
 
 export function MobileNav({ tools }: { tools: { slug: string; label: string }[] }) {
   const [open, setOpen] = useState(false)
+  /** Section links on the current page: wait for the sheet to release the scroll lock, then glide to the section. */
+  const go = (e: React.MouseEvent, href: string) => {
+    setOpen(false)
+    const hash = href.split('#')[1]
+    if (hash && window.location.pathname === href.split('#')[0].replace(/^$/, '/')) {
+      e.preventDefault()
+      setTimeout(() => {
+        window.history.pushState(null, '', href)
+        document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 350)
+    }
+  }
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -26,7 +38,7 @@ export function MobileNav({ tools }: { tools: { slug: string; label: string }[] 
         <SheetHeader><SheetTitle>Menu</SheetTitle></SheetHeader>
         <nav aria-label="Mobile" className="flex flex-col gap-1 px-4 pb-8">
           {LINKS.map((l) => (
-            <Link key={l.href} href={l.href} onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-base font-medium hover:bg-accent">{l.label}</Link>
+            <Link key={l.href} href={l.href} onClick={(e) => go(e, l.href)} className="rounded-lg px-3 py-2.5 text-base font-medium hover:bg-accent">{l.label}</Link>
           ))}
           <div className="mt-4 px-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">PDF tools</div>
           {tools.map((t) => (

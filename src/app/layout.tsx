@@ -30,7 +30,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning className="h-full antialiased">
+    <html lang="en" suppressHydrationWarning className="h-full antialiased" data-scroll-behavior="smooth">
+      <head>
+        {[400, 600, 700].map((w) => <link key={w} rel="preload" href={`/fonts/inter-${w}-normal.woff`} as="font" type="font/woff" crossOrigin="anonymous" />)}
+      </head>
       <body className="min-h-full flex flex-col">
         <ThemeProvider>
           <TooltipProvider delayDuration={300}>{children}</TooltipProvider>

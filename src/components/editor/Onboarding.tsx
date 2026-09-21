@@ -22,8 +22,10 @@ export function Onboarding({ hint }: { hint?: string }) {
   }, [])
   const recent = projects.slice(0, 4)
   return (
-    <div className="relative flex h-full flex-col items-center justify-center gap-6 overflow-auto bg-gradient-to-b from-primary/5 via-background to-violet-500/5 p-4 text-center sm:p-6" data-testid="onboarding">
+    <div className="relative flex h-full flex-col overflow-y-auto overscroll-contain bg-gradient-to-b from-primary/5 via-background to-violet-500/5 text-center" data-testid="onboarding">
       <div className="bg-grid pointer-events-none absolute inset-0 opacity-60" aria-hidden />
+      {/* m-auto centres short content but lets tall content start at the top and scroll (justify-center would clip the top on phones) */}
+      <div className="relative m-auto flex w-full flex-col items-center gap-6 p-4 sm:p-6">
       <div className="relative w-full max-w-2xl rounded-3xl border-2 border-dashed border-primary/30 bg-card/80 p-6 shadow-xl shadow-primary/5 backdrop-blur sm:p-10">
         <BrandMark size={72} className="mx-auto mb-4 drop-shadow-lg" />
         <h1 className="text-3xl font-bold tracking-tight">Drop a PDF here</h1>
@@ -57,6 +59,7 @@ export function Onboarding({ hint }: { hint?: string }) {
           </Tooltip>
         </div>
       )}
+      </div>
     </div>
   )
 }

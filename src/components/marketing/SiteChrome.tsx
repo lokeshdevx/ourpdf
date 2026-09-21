@@ -4,6 +4,7 @@ import { MadeInIndia } from '@/components/made-in-india'
 import { SEO_PAGES } from '@/lib/seo-pages'
 import { SITE } from '@/lib/site'
 import { BrandMark, Wordmark } from '@/components/brand'
+import { BackToTop } from './BackToTop'
 import { MobileNav } from './MobileNav'
 
 export function Logo({ className = '' }: { className?: string }) {
@@ -39,6 +40,9 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   return (
+    <>
+      <BackToTop />
+
     <footer className="border-t bg-muted/30">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-2 lg:grid-cols-5">
         <div className="lg:col-span-2">
@@ -68,6 +72,7 @@ export function SiteFooter() {
         <MadeInIndia className="font-medium text-foreground/80" />
       </div>
     </footer>
+    </>
   )
 }
 

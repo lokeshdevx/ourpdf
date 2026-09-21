@@ -52,4 +52,6 @@ for (const fam of library) {
     faces++
   }
 }
+// the UI typeface (Inter) also needs the heavy weights the library does not ship
+for (const w of [800, 900]) cpSync(nm('@fontsource/inter/files', `inter-latin-${w}-normal.woff`), pub('fonts', `inter-${w}-normal.woff`))
 console.log(`assets copied to /public (pdfjs, tesseract, tessdata, ${faces} font faces)`)
