@@ -30,7 +30,7 @@ export default function LabelsDialog() {
     >
       <div className="space-y-2">
         {ranges.map((r, i) => (
-          <div key={i} className="grid grid-cols-[80px_1fr_100px_70px_32px] items-end gap-2">
+          <div key={i} className="grid grid-cols-2 items-end gap-2 sm:grid-cols-[80px_1fr_100px_70px_32px]">
             <label className="text-xs text-muted-foreground">Starting page<Input type="number" min={1} max={pages.length} value={r.from + 1} onChange={(e) => upd(i, { from: Math.max(0, Math.min(pages.length - 1, (parseInt(e.target.value) || 1) - 1)) })} aria-label="Starting page" /></label>
             <label className="text-xs text-muted-foreground">Style
               <Select value={r.style} onValueChange={(v) => upd(i, { style: v as PageLabelRange['style'] })}>
@@ -40,7 +40,7 @@ export default function LabelsDialog() {
             </label>
             <label className="text-xs text-muted-foreground">Prefix<Input value={r.prefix} onChange={(e) => upd(i, { prefix: e.target.value })} aria-label="Prefix" /></label>
             <label className="text-xs text-muted-foreground">Start at<Input type="number" min={1} value={r.start} onChange={(e) => upd(i, { start: parseInt(e.target.value) || 1 })} aria-label="Start number" /></label>
-            <Button size="icon-sm" variant="ghost" aria-label="Remove range" disabled={ranges.length === 1} onClick={() => setRanges((l) => l.filter((_, k) => k !== i))}><Trash2 className="size-4" /></Button>
+            <Button size="icon-sm" variant="ghost" className="col-span-2 justify-self-end sm:col-span-1" aria-label="Remove range" disabled={ranges.length === 1} onClick={() => setRanges((l) => l.filter((_, k) => k !== i))}><Trash2 className="size-4" /></Button>
           </div>
         ))}
         <Button size="sm" variant="outline" onClick={() => setRanges((l) => [...l, { from: Math.min(pages.length - 1, (l[l.length - 1]?.from ?? 0) + 1), style: 'decimal', prefix: '', start: 1 }])}><Plus className="size-4" /> Add range</Button>

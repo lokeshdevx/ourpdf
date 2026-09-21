@@ -3,14 +3,15 @@
 import { useState } from 'react'
 import { AlignCenter, AlignJustify, AlignLeft, AlignRight, Bold, ChevronDown, Command as CommandIcon, Italic, Redo2, Strikethrough, Underline, Undo2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { Toggle } from '@/components/ui/toggle'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { getCommand, runCommand, shortcutOf } from '@/features/commands'
+import { COMMAND_HELP } from '@/features/command-help'
+import { Tip } from '../Tip'
+import { getCommand, helpOf, runCommand, shortcutOf } from '@/features/commands'
 import { formatCombo } from '@/features/shortcuts'
 import { STAMP_PRESETS } from '@/lib/stamps'
 import { FontPicker } from '../FontPicker'
@@ -30,9 +31,8 @@ function CmdButton({ id, active, className, label }: { id: string; active?: bool
   const Icon = c.icon
   const sc = formatCombo(shortcutOf(c))
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
+    <Tip title={label ?? c.title} shortcut={sc} help={helpOf(c)}>
+      <Button
           variant={active ? 'secondary' : 'ghost'}
           size="icon-sm"
           aria-label={label ?? c.title}
@@ -43,13 +43,7 @@ function CmdButton({ id, active, className, label }: { id: string; active?: bool
         >
           {Icon ? <Icon className="size-4" /> : c.title[0]}
         </Button>
-      </TooltipTrigger>
-      <TooltipContent>
-        {label ?? c.title}
-        {sc && <span className="ml-2 opacity-70">{sc}</span>}
-        {c.note && <div className="mt-1 max-w-64 text-[11px] opacity-80">{c.note}</div>}
-      </TooltipContent>
-    </Tooltip>
+    </Tip>
   )
 }
 
@@ -65,28 +59,29 @@ function ToolGroup({ ids, label }: { ids: string[]; label: string }) {
   void tool
   return (
     <div className="flex items-center">
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button variant={active ? 'secondary' : 'ghost'} size="icon-sm" className={cn('size-8 rounded-r-none', active && 'bg-primary/15 text-primary ring-1 ring-primary/40')} aria-label={c.title} aria-pressed={active} data-command={shown} onClick={() => void runCommand(shown)}>
+      <Tip title={c.title} shortcut={formatCombo(shortcutOf(c))} help={`${helpOf(c)} Use the arrow for other ${label.toLowerCase()} tools.`}>
+        <Button variant={active ? 'secondary' : 'ghost'} size="icon-sm" className={cn('size-8 rounded-r-none', active && 'bg-primary/15 text-primary ring-1 ring-primary/40')} aria-label={c.title} aria-pressed={active} data-command={shown} onClick={() => void runCommand(shown)}>
             {Icon && <Icon className="size-4" />}
           </Button>
-        </TooltipTrigger>
-        <TooltipContent>{c.title}</TooltipContent>
-      </Tooltip>
+      </Tip>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon-sm" className="h-8 w-4 rounded-l-none px-0" aria-label={`${label} tools`}>
+          <Button variant="ghost" size="icon-sm" className="h-8 w-4 rounded-l-none px-0" aria-label={`${label} tools`} title={`More ${label.toLowerCase()} tools`}>
             <ChevronDown className="size-3" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start">
+        <DropdownMenuContent align="start" className="w-72">
+          <DropdownMenuLabel className="text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">{label}</DropdownMenuLabel>
           {ids.map((id) => {
             const cc = getCommand(id)!
             const I = cc.icon
             return (
-              <DropdownMenuItem key={id} data-command={id} onSelect={() => { setLast(id); void runCommand(id) }}>
-                {I && <I className="size-4" />}
-                {cc.title}
+              <DropdownMenuItem key={id} data-command={id} className="items-start gap-2.5 py-2" onSelect={() => { setLast(id); void runCommand(id) }}>
+                {I && <I className="mt-0.5 size-4 shrink-0" />}
+                <span className="min-w-0">
+                  <span className="block text-sm font-medium">{cc.title}</span>
+                  <span className="block text-[11px] leading-snug whitespace-normal text-muted-foreground">{helpOf(cc)}</span>
+                </span>
               </DropdownMenuItem>
             )
           })}
@@ -108,13 +103,22 @@ export function Ribbon() {
   const disabled = !docId
   return (
     <div className="border-b bg-background" data-testid="ribbon">
-      <div className="flex items-center gap-0.5 overflow-x-auto px-2 py-1 scroll-thin" role="toolbar" aria-label="Tools" aria-orientation="horizontal">
-        <Button variant="ghost" size="icon-sm" className="size-8" aria-label="Undo" title="Undo (Ctrl/Cmd+Z)" disabled={!canUndo} onClick={() => void runCommand('edit.undo')} data-command="edit.undo">
-          <Undo2 className="size-4" />
-        </Button>
-        <Button variant="ghost" size="icon-sm" className="size-8" aria-label="Redo" title="Redo (Ctrl/Cmd+Shift+Z)" disabled={!canRedo} onClick={() => void runCommand('edit.redo')} data-command="edit.redo">
-          <Redo2 className="size-4" />
-        </Button>
+      <div className="relative">
+      <div className="flex items-center gap-0.5 overflow-x-auto px-2 py-1 pr-8 scroll-thin lg:pr-2" role="toolbar" aria-label="Tools" aria-orientation="horizontal">
+        <Tip title="Undo" shortcut="Ctrl+Z" help={COMMAND_HELP['edit.undo']}>
+          <span className="inline-flex">
+            <Button variant="ghost" size="icon-sm" className="size-8" aria-label="Undo" disabled={!canUndo} onClick={() => void runCommand('edit.undo')} data-command="edit.undo">
+              <Undo2 className="size-4" />
+            </Button>
+          </span>
+        </Tip>
+        <Tip title="Redo" shortcut="Ctrl+Shift+Z" help={COMMAND_HELP['edit.redo']}>
+          <span className="inline-flex">
+            <Button variant="ghost" size="icon-sm" className="size-8" aria-label="Redo" disabled={!canRedo} onClick={() => void runCommand('edit.redo')} data-command="edit.redo">
+              <Redo2 className="size-4" />
+            </Button>
+          </span>
+        </Tip>
         <Sep />
         <div className={cn('flex items-center gap-0.5', disabled && 'pointer-events-none opacity-50')}>
           <CmdButton id="tool.select" active={tool === 'select'} />
@@ -141,9 +145,12 @@ export function Ribbon() {
         </div>
         <div className="ml-auto flex items-center gap-1 pl-2">
           <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs" onClick={() => document.dispatchEvent(new CustomEvent('pdfstudio:palette'))} aria-label="Open command palette" data-testid="palette-button">
-            <CommandIcon className="size-3.5" /> <span className="hidden sm:inline">Search tools</span> <kbd className="hidden rounded border px-1 text-[10px] sm:inline">Ctrl K</kbd>
+            <CommandIcon className="size-3.5" /> <span className="hidden xl:inline">Search tools</span> <kbd className="hidden rounded border px-1 text-[10px] xl:inline">Ctrl K</kbd>
           </Button>
         </div>
+      </div>
+      {/* scroll cue: the tool row scrolls sideways on narrow screens */}
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-background via-background/80 to-transparent lg:hidden" aria-hidden />
       </div>
       <OptionsBar tool={tool} sticky={sticky} />
     </div>
@@ -160,8 +167,8 @@ function OptionsBar({ tool, sticky }: { tool: ToolId; sticky: boolean }) {
   const set = useToolStore((s) => s.setOptions)
   const cropDraft = useUiStore((s) => s.cropDraft)
   const formMode = useUiStore((s) => s.formMode)
-  const wrap = 'flex min-h-9 items-center gap-2 overflow-x-auto border-t bg-muted/30 px-2 py-1 text-xs scroll-thin'
-  const hint = (t: string) => <span className="text-muted-foreground">{t}</span>
+  const wrap = 'flex min-h-9 items-center gap-2 overflow-x-auto border-t bg-muted/30 px-2 py-1 text-xs scroll-thin [&>*:not([data-hint])]:shrink-0'
+  const hint = (t: string) => <span data-hint className="line-clamp-2 min-w-48 text-muted-foreground sm:line-clamp-none" title={t}>{t}</span>
   const stickyToggle = (
     <Toggle size="sm" pressed={sticky} onPressedChange={(v) => useToolStore.getState().setSticky(v)} className="h-7 px-2 text-xs" aria-label="Keep tool active after each use">
       Keep tool

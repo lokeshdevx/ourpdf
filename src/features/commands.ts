@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { themeBridge } from './theme-bridge'
+import { COMMAND_HELP } from './command-help'
 import { comboFromEvent, normalizeCombo } from './shortcuts'
 import { useShortcutStore } from '@/stores/shortcut-store'
 import { redo, undo } from '@/services/history'
@@ -354,6 +355,7 @@ export const COMMANDS: Command[] = [
 
   /* ---- Help ---- */
   { id: 'help.shortcuts', title: 'Keyboard shortcuts…', category: 'Help', icon: Keyboard, global: true, shortcut: 'shift+?', keywords: ['customize', 'keys'], run: dialog('shortcuts') },
+  { id: 'help.tools', title: 'Tool guide (what everything does)…', category: 'Help', icon: BookOpen, global: true, keywords: ['help', 'guide', 'tooltips', 'learn', 'tutorial', 'features'], run: dialog('toolGuide') },
   { id: 'help.about', title: 'About, privacy & limitations…', category: 'Help', icon: Info, global: true, keywords: ['help', 'privacy', 'limits'], run: dialog('about') },
 ]
 
@@ -363,6 +365,8 @@ function showTab(tab: LeftTab) {
 
 export const COMMAND_MAP = new Map(COMMANDS.map((c) => [c.id, c]))
 export const getCommand = (id: string) => COMMAND_MAP.get(id)
+/** One-sentence summary of what a command does (plus its honest limitation, if any). */
+export const helpOf = (c: Command) => COMMAND_HELP[c.id] ?? c.note ?? ''
 
 /** Effective shortcut (user override or default). */
 export function shortcutOf(c: Command | string): string {

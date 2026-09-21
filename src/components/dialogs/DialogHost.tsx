@@ -33,6 +33,7 @@ const REGISTRY: Partial<Record<DialogId, ComponentType>> = {
   shortcuts: lazy(() => import('./ShortcutsDialog')),
   settings: lazy(() => import('./SettingsDialog')),
   about: lazy(() => import('./AboutDialog')),
+  toolGuide: lazy(() => import('./ToolGuideDialog')),
   redact: lazy(() => import('./RedactDialog')),
   link: lazy(() => import('./LinkDialog')),
   stamp: lazy(() => import('./StampDialog')),

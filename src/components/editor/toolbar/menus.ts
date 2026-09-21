@@ -16,5 +16,5 @@ export const MENUS: MenuDef[] = [
   { label: 'Sign', items: ['sign.create', 'sign.date', 'sign.name', 'form.field-signature'] },
   { label: 'Convert', items: ['convert.dialog', 'convert.toPng', 'convert.toJpg', 'convert.toText', 'convert.toHtml', 'convert.exportAnnotations', 'convert.canvasToPdf', '-', 'file.importImages'] },
   { label: 'Tools', items: ['ocr.run', 'opt.compress', '-', 'sec.security', 'sec.redact', 'sec.redactText', 'sec.applyRedactions', 'sec.redactPreview', '-', 'file.metadata', 'opt.flatten', '-', 'wm.add', 'hf.header', 'hf.footer', 'hf.bates'] },
-  { label: 'Help', items: ['help.shortcuts', 'help.about'] },
+  { label: 'Help', items: ['help.tools', 'help.shortcuts', 'help.about'] },
 ]

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandShortcut } from '@/components/ui/command'
-import { COMMANDS, isEnabled, runCommand, shortcutOf, type Category } from '@/features/commands'
+import { COMMANDS, helpOf, isEnabled, runCommand, shortcutOf, type Category } from '@/features/commands'
 import { formatCombo } from '@/features/shortcuts'
 import { usePdfStore } from '@/stores/pdf-store'
 
@@ -33,7 +33,7 @@ export function CommandPalette() {
               return (
                 <CommandItem
                   key={c.id}
-                  value={`${c.title} ${cat} ${(c.keywords ?? []).join(' ')} ${c.id}`}
+                  value={`${c.title} ${cat} ${(c.keywords ?? []).join(' ')} ${helpOf(c)} ${c.id}`}
                   disabled={!enabled}
                   data-command={c.id}
                   onSelect={() => {
@@ -44,7 +44,7 @@ export function CommandPalette() {
                   {Icon && <Icon className="size-4" aria-hidden />}
                   <div className="min-w-0">
                     <div className="truncate">{c.title}</div>
-                    {c.note && <div className="truncate text-[11px] text-muted-foreground">{c.note}</div>}
+                    {helpOf(c) && <div className="line-clamp-2 text-[11px] leading-snug text-muted-foreground">{helpOf(c)}</div>}
                   </div>
                   {sc && <CommandShortcut>{sc}</CommandShortcut>}
                 </CommandItem>

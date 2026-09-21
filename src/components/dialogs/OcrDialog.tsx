@@ -85,7 +85,7 @@ export default function OcrDialog() {
       footer={<><Button variant="outline" onClick={close}>Close</Button>{busy ? <Button variant="destructive" onClick={() => ctrl?.abort()} data-testid="ocr-cancel">Cancel OCR</Button> : <Button onClick={() => void run()} data-testid="ocr-run"><ScanText className="size-4" /> Recognise {scope.ids.length} page{scope.ids.length === 1 ? '' : 's'}</Button>}</>}
     >
       <div className="space-y-2">
-        <div className="flex items-center justify-between"><h3 className="text-sm font-medium">Languages</h3><Button size="sm" variant="outline" disabled={detecting || busy} onClick={() => void detect()}>{detecting ? <Loader2 className="size-3.5 animate-spin" /> : <Languages className="size-3.5" />} Detect from current page</Button></div>
+        <div className="flex flex-wrap items-center justify-between gap-2"><h3 className="text-sm font-medium">Languages</h3><Button size="sm" variant="outline" disabled={detecting || busy} onClick={() => void detect()}>{detecting ? <Loader2 className="size-3.5 animate-spin" /> : <Languages className="size-3.5" />} Detect from current page</Button></div>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
           {OCR_LANGUAGES.map((l) => <Label key={l.code} className="flex items-center gap-2 font-normal"><Checkbox checked={langs.includes(l.code)} onCheckedChange={() => toggle(l.code)} data-testid={`lang-${l.code}`} /> {l.label}</Label>)}
         </div>

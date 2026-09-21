@@ -222,7 +222,7 @@ test.describe('mobile @mobile', () => {
     await page.waitForSelector('[data-testid=pdf-page] canvas')
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true)
     await page.getByRole('button', { name: 'Menu' }).click()
-    await expect(page.getByRole('menuitem', { name: 'File' })).toBeVisible()
+    await expect(page.getByTestId('mobile-menu').getByRole('button', { name: 'File', exact: true })).toBeVisible()
     await page.keyboard.press('Escape')
     await page.getByRole('button', { name: 'Open pages and panels' }).click()
     await expect(page.getByTestId('left-sidebar')).toBeVisible()

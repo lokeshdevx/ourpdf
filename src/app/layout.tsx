@@ -34,7 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-full flex flex-col">
         <ThemeProvider>
           <TooltipProvider delayDuration={300}>{children}</TooltipProvider>
-          <Toaster richColors closeButton position="bottom-right" />
+          <Toaster richColors closeButton position="bottom-right" offset={{ right: 16, bottom: 84 }} mobileOffset={{ left: 12, right: 12, bottom: 124 }} />
           <SwRegister />
         </ThemeProvider>
       </body>

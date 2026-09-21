@@ -1,5 +1,7 @@
 'use client'
 
+import { FIELD_HELP } from '@/features/command-help'
+import { Tip } from './Tip'
 import { useId } from 'react'
 import { Ban } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -15,14 +17,16 @@ export function ColorField({ value, onChange, label, allowNone, className, compa
   const id = useId()
   return (
     <Popover>
+      <Tip title={label} help={FIELD_HELP[label] ?? 'Click to choose a colour.'}>
       <PopoverTrigger asChild>
-        <Button variant="outline" size={compact ? 'icon-sm' : 'sm'} aria-label={label} title={label} className={cn(compact ? 'size-7 p-0' : 'h-8 gap-2 px-2', className)}>
+        <Button variant="outline" size={compact ? 'icon-sm' : 'sm'} aria-label={label} data-slot="color-field" className={cn(compact ? 'size-7 p-0' : 'h-8 gap-2 px-2', className)}>
           <span className="relative block size-4 rounded-sm border" style={{ background: value ?? 'transparent' }}>
             {!value && <Ban className="absolute inset-0 size-4 text-muted-foreground" aria-hidden />}
           </span>
           {!compact && <span className="text-xs font-normal">{value ?? 'None'}</span>}
         </Button>
       </PopoverTrigger>
+      </Tip>
       <PopoverContent className="w-56 space-y-2 p-3" align="start">
         <div className="grid grid-cols-7 gap-1.5" role="listbox" aria-label={`${label} presets`}>
           {SWATCHES.map((c) => (
@@ -48,10 +52,10 @@ export function NumberField({ value, onChange, label, min, max, step = 1, classN
   return (
     <div className={cn('flex items-center gap-1', className)}>
       <Label htmlFor={id} className="sr-only">{label}</Label>
+      <Tip title={label} help={FIELD_HELP[label]}>
       <Input
         id={id}
         type="number"
-        title={label}
         aria-label={label}
         value={Number.isFinite(value) ? Math.round(value * 100) / 100 : ''}
         min={min}
@@ -64,6 +68,7 @@ export function NumberField({ value, onChange, label, min, max, step = 1, classN
         }}
         className="h-8 w-full min-w-0 px-2 text-xs"
       />
+      </Tip>
       {suffix && <span className="text-xs text-muted-foreground">{suffix}</span>}
     </div>
   )
@@ -73,7 +78,7 @@ export function SliderField({ value, onChange, label, min, max, step, format }: 
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between text-xs">
-        <span className="text-muted-foreground">{label}</span>
+        <Tip title={label} help={FIELD_HELP[label]}><span className={cn('text-muted-foreground', FIELD_HELP[label] && 'cursor-help')}>{label}</span></Tip>
         <span className="tabular-nums">{format ? format(value) : value}</span>
       </div>
       <Slider aria-label={label} value={[value]} min={min} max={max} step={step} onValueChange={(v) => onChange(v[0])} />
@@ -93,7 +98,9 @@ export function Section({ title, children, className }: { title: string; childre
 export function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="grid grid-cols-[84px_1fr] items-center gap-2 text-xs">
-      <span className="text-muted-foreground">{label}</span>
+      <Tip title={label} help={FIELD_HELP[label]}>
+        <span className={cn('text-muted-foreground', FIELD_HELP[label] && 'cursor-help underline decoration-dotted decoration-muted-foreground/50 underline-offset-2')}>{label}</span>
+      </Tip>
       <div className="min-w-0">{children}</div>
     </div>
   )

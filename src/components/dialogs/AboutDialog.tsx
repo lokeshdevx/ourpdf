@@ -22,7 +22,7 @@ export default function AboutDialog() {
           <li><strong className="text-foreground">Passwords</strong>: AES-256 encryption is genuine; permission flags (print/copy/edit) are honoured only by compliant viewers.</li>
           <li><strong className="text-foreground">Cropping</strong> hides content but does not delete it, like most editors.</li>
           <li><strong className="text-foreground">DOCX/XLSX → PDF</strong> is best-effort (no complex layout). <strong className="text-foreground">PDF → DOCX/XLSX/PPTX</strong> is not offered because it cannot be done reliably without a server.</li>
-          <li><strong className="text-foreground">Fonts</strong>: standard PDF fonts cover Latin text; other scripts are embedded as images unless you load a custom TTF/OTF font.</li>
+          <li><strong className="text-foreground">Fonts</strong>: standard PDF fonts, about 50 bundled open-licence families (Latin), fonts found in the PDF and your own TTF / OTF / WOFF files. Characters no font can encode are embedded as images.</li>
           <li><strong className="text-foreground">Very large files</strong> are streamed for viewing, but exporting needs the whole file in memory; the status bar warns when memory gets risky.</li>
           <li>Annotations are written into page content on export (not as editable native annotations), except links, notes and form fields which are native. The editable version lives in your local project.</li>
         </ul>

@@ -37,6 +37,7 @@ export type DialogId =
   | 'shortcuts'
   | 'settings'
   | 'about'
+  | 'toolGuide'
   | 'formData'
   | 'redact'
   | 'stamp'

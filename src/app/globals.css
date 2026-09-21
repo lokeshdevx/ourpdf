@@ -187,3 +187,14 @@ html, body { height: 100%; }
 .card-lift { transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
 .card-lift:hover { transform: translateY(-3px); box-shadow: 0 12px 30px -12px color-mix(in oklab, var(--primary) 35%, transparent); border-color: color-mix(in oklab, var(--primary) 45%, var(--border)); }
 html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+
+/* ---- Dialog layout on narrow screens: multi-column form rows collapse, nothing may overflow sideways ---- */
+[data-slot='dialog-content'] .grid > * { min-width: 0; }
+[data-slot='dialog-content'] [data-slot='select-trigger'] { max-width: 100%; }
+@media (max-width: 519px) {
+  [data-slot='dialog-content'] .grid-cols-3:not([role='tablist']):not([role='radiogroup']),
+  [data-slot='dialog-content'] .grid-cols-4:not([role='tablist']):not([role='radiogroup']) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  [data-slot='dialog-content'] [role='tablist'].grid-cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); height: auto; }
+  [data-slot='dialog-content'] [role='tablist'] > [role='tab'] { min-width: 0; padding-inline: 0.25rem; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  [data-slot='dialog-content'] [data-slot='color-field'] { min-width: 0; }
+}

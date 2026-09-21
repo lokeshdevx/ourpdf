@@ -46,9 +46,9 @@ export function BottomBar() {
   const label = docId && total ? getPageLabelText(docId, current) : ''
 
   return (
-    <div className="flex items-center gap-1 border-t bg-background px-2 py-1 text-xs" role="toolbar" aria-label="Page and zoom controls" data-testid="bottombar">
+    <div className="scroll-thin flex items-center gap-1 overflow-x-auto border-t bg-background px-2 py-1 text-xs [&>*]:shrink-0" role="toolbar" aria-label="Page and zoom controls" data-testid="bottombar">
       <div className="flex items-center gap-0.5">
-        <Button variant="ghost" size="icon-sm" disabled={disabled || current === 0} onClick={() => goToPage(0)} aria-label="First page"><ChevronFirst className="size-4" /></Button>
+        <Button variant="ghost" size="icon-sm" className="hidden sm:inline-flex" disabled={disabled || current === 0} onClick={() => goToPage(0)} aria-label="First page"><ChevronFirst className="size-4" /></Button>
         <Button variant="ghost" size="icon-sm" disabled={disabled || current === 0} onClick={() => goToPage(current - 1)} aria-label="Previous page"><ChevronLeft className="size-4" /></Button>
         <Input
           value={draft}
@@ -62,7 +62,7 @@ export function BottomBar() {
         />
         <span className="px-1 text-muted-foreground" data-testid="page-total">/ {total || 0}{label && label !== String(current + 1) ? ` (${label})` : ''}</span>
         <Button variant="ghost" size="icon-sm" disabled={disabled || current >= total - 1} onClick={() => goToPage(current + 1)} aria-label="Next page"><ChevronRight className="size-4" /></Button>
-        <Button variant="ghost" size="icon-sm" disabled={disabled || current >= total - 1} onClick={() => goToPage(total - 1)} aria-label="Last page"><ChevronLast className="size-4" /></Button>
+        <Button variant="ghost" size="icon-sm" className="hidden sm:inline-flex" disabled={disabled || current >= total - 1} onClick={() => goToPage(total - 1)} aria-label="Last page"><ChevronLast className="size-4" /></Button>
       </div>
       <Separator orientation="vertical" className="mx-1 h-5" />
       <div className="flex items-center gap-0.5">
@@ -73,14 +73,14 @@ export function BottomBar() {
           onChange={(e) => setZoomDraft(e.target.value.replace(/[^\d.]/g, ''))}
           onBlur={() => { const v = parseFloat(zoomDraft); if (Number.isFinite(v) && v >= 10 && v <= 800) set({ fit: 'custom', zoom: v / 100 }); setZoomDraft('') }}
           onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
-          className="h-7 w-16 px-1 text-center text-xs"
+          className="h-7 w-14 px-1 text-center text-xs sm:w-16"
           aria-label="Zoom percentage (custom zoom)"
           disabled={disabled}
           data-testid="zoom-input"
         />
         <Button variant="ghost" size="icon-sm" disabled={disabled} onClick={() => zoomBy(1.2)} aria-label="Zoom in"><Plus className="size-4" /></Button>
         <Select value={fit === 'custom' ? 'z' : fit} onValueChange={(v) => { if (v === 'z') return; if (['width', 'page', 'height'].includes(v)) set({ fit: v as FitMode }); else set({ fit: 'custom', zoom: Number(v) / 100 }) }} disabled={disabled}>
-          <SelectTrigger className="h-7 w-28 text-xs" aria-label="Zoom preset"><SelectValue placeholder="Zoom" /></SelectTrigger>
+          <SelectTrigger className="h-7 w-[6.5rem] text-xs sm:w-28" aria-label="Zoom preset"><SelectValue placeholder="Zoom" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="width">Fit width</SelectItem>
             <SelectItem value="page">Fit page</SelectItem>
@@ -106,7 +106,7 @@ export function BottomBar() {
       </div>
       <div className="ml-auto flex items-center gap-0.5">
         <Button variant={organizer ? 'secondary' : 'ghost'} size="icon-sm" disabled={disabled} onClick={() => void runCommand('pages.organizer')} aria-label="Page organizer" aria-pressed={organizer} title="Page organizer"><LayoutGrid className="size-4" /></Button>
-        <Button variant="ghost" size="icon-sm" onClick={() => void runCommand('view.fullscreen')} aria-label="Full screen"><Fullscreen className="size-4" /></Button>
+        <Button variant="ghost" size="icon-sm" className="hidden sm:inline-flex" onClick={() => void runCommand('view.fullscreen')} aria-label="Full screen"><Fullscreen className="size-4" /></Button>
       </div>
     </div>
   )
