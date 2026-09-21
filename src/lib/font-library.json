@@ -1,0 +1,774 @@
+[
+ {
+  "id": "anonymous-pro",
+  "name": "Anonymous Pro",
+  "cat": "monospace",
+  "faces": [
+   "400n",
+   "400i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "arimo",
+  "name": "Arimo",
+  "cat": "sans-serif",
+  "faces": [
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "bitter",
+  "name": "Bitter",
+  "cat": "serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "cabin",
+  "name": "Cabin",
+  "cat": "sans-serif",
+  "faces": [
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "caladea",
+  "name": "Caladea",
+  "cat": "serif",
+  "faces": [
+   "400n",
+   "400i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "cantarell",
+  "name": "Cantarell",
+  "cat": "sans-serif",
+  "faces": [
+   "400n",
+   "400i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "carlito",
+  "name": "Carlito",
+  "cat": "sans-serif",
+  "faces": [
+   "400n",
+   "400i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "courier-prime",
+  "name": "Courier Prime",
+  "cat": "monospace",
+  "faces": [
+   "400n",
+   "400i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "cousine",
+  "name": "Cousine",
+  "cat": "monospace",
+  "faces": [
+   "400n",
+   "400i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "crimson-text",
+  "name": "Crimson Text",
+  "cat": "serif",
+  "faces": [
+   "400n",
+   "400i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "dejavu-sans",
+  "name": "DejaVu Sans",
+  "cat": "sans-serif",
+  "faces": [
+   "400n",
+   "400i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "dejavu-serif",
+  "name": "DejaVu Serif",
+  "cat": "serif",
+  "faces": [
+   "400n",
+   "400i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "dm-sans",
+  "name": "DM Sans",
+  "cat": "sans-serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "eb-garamond",
+  "name": "EB Garamond",
+  "cat": "serif",
+  "faces": [
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "fira-mono",
+  "name": "Fira Mono",
+  "cat": "monospace",
+  "faces": [
+   "400n",
+   "500n",
+   "700n"
+  ]
+ },
+ {
+  "id": "fira-sans",
+  "name": "Fira Sans",
+  "cat": "sans-serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "gelasio",
+  "name": "Gelasio",
+  "cat": "serif",
+  "faces": [
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "ibm-plex-mono",
+  "name": "IBM Plex Mono",
+  "cat": "monospace",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "ibm-plex-sans",
+  "name": "IBM Plex Sans",
+  "cat": "sans-serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "ibm-plex-serif",
+  "name": "IBM Plex Serif",
+  "cat": "serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "inter",
+  "name": "Inter",
+  "cat": "sans-serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "karla",
+  "name": "Karla",
+  "cat": "sans-serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "lato",
+  "name": "Lato",
+  "cat": "sans-serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "libre-baskerville",
+  "name": "Libre Baskerville",
+  "cat": "serif",
+  "faces": [
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "libre-franklin",
+  "name": "Libre Franklin",
+  "cat": "sans-serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "lora",
+  "name": "Lora",
+  "cat": "serif",
+  "faces": [
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "merriweather",
+  "name": "Merriweather",
+  "cat": "serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "montserrat",
+  "name": "Montserrat",
+  "cat": "sans-serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "noto-sans",
+  "name": "Noto Sans",
+  "cat": "sans-serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "noto-sans-mono",
+  "name": "Noto Sans Mono",
+  "cat": "sans-serif",
+  "faces": [
+   "300n",
+   "400n",
+   "500n",
+   "600n",
+   "700n"
+  ]
+ },
+ {
+  "id": "noto-serif",
+  "name": "Noto Serif",
+  "cat": "serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "nunito",
+  "name": "Nunito",
+  "cat": "sans-serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "nunito-sans",
+  "name": "Nunito Sans",
+  "cat": "sans-serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "open-sans",
+  "name": "Open Sans",
+  "cat": "sans-serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "opendyslexic",
+  "name": "OpenDyslexic",
+  "cat": "sans-serif",
+  "faces": [
+   "400n",
+   "400i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "oswald",
+  "name": "Oswald",
+  "cat": "sans-serif",
+  "faces": [
+   "300n",
+   "400n",
+   "500n",
+   "600n",
+   "700n"
+  ]
+ },
+ {
+  "id": "playfair-display",
+  "name": "Playfair Display",
+  "cat": "serif",
+  "faces": [
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "poppins",
+  "name": "Poppins",
+  "cat": "sans-serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "pt-sans",
+  "name": "PT Sans",
+  "cat": "sans-serif",
+  "faces": [
+   "400n",
+   "400i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "pt-serif",
+  "name": "PT Serif",
+  "cat": "serif",
+  "faces": [
+   "400n",
+   "400i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "quicksand",
+  "name": "Quicksand",
+  "cat": "sans-serif",
+  "faces": [
+   "300n",
+   "400n",
+   "500n",
+   "600n",
+   "700n"
+  ]
+ },
+ {
+  "id": "raleway",
+  "name": "Raleway",
+  "cat": "sans-serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "roboto",
+  "name": "Roboto",
+  "cat": "sans-serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "roboto-mono",
+  "name": "Roboto Mono",
+  "cat": "monospace",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "roboto-slab",
+  "name": "Roboto Slab",
+  "cat": "serif",
+  "faces": [
+   "300n",
+   "400n",
+   "500n",
+   "600n",
+   "700n"
+  ]
+ },
+ {
+  "id": "rubik",
+  "name": "Rubik",
+  "cat": "sans-serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "source-code-pro",
+  "name": "Source Code Pro",
+  "cat": "monospace",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "source-sans-3",
+  "name": "Source Sans 3",
+  "cat": "sans-serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "source-serif-4",
+  "name": "Source Serif 4",
+  "cat": "serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "space-mono",
+  "name": "Space Mono",
+  "cat": "monospace",
+  "faces": [
+   "400n",
+   "400i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "tinos",
+  "name": "Tinos",
+  "cat": "serif",
+  "faces": [
+   "400n",
+   "400i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "ubuntu",
+  "name": "Ubuntu",
+  "cat": "sans-serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "700n",
+   "700i"
+  ]
+ },
+ {
+  "id": "work-sans",
+  "name": "Work Sans",
+  "cat": "sans-serif",
+  "faces": [
+   "300n",
+   "300i",
+   "400n",
+   "400i",
+   "500n",
+   "500i",
+   "600n",
+   "600i",
+   "700n",
+   "700i"
+  ]
+ }
+]

@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+/public/pdfjs
+/public/tesseract
+/public/tessdata
+/public/fonts
+/public/precache-manifest.json
+/test-results
+/playwright-report
+/public/workers
