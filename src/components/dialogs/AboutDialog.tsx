@@ -11,7 +11,7 @@ export default function AboutDialog() {
     <DialogShell id="about" title="About OurPDF" size="lg" footer={<Button onClick={close}>Close</Button>}>
       <section className="space-y-1 text-sm">
         <h3 className="flex items-center gap-2 font-medium"><Lock className="size-4" /> Privacy</h3>
-        <p>Your files never leave this device. There is no server, account, upload or analytics. The page’s Content-Security-Policy also blocks network requests to other origins, so the browser itself prevents accidental leaks. After the first visit the app works offline.</p>
+        <p>Your files never leave this device. There is no server, account or upload, and the editor runs no analytics. Its Content-Security-Policy also blocks network requests to other origins, so the browser itself prevents accidental leaks. After the first visit the app works offline.</p>
       </section>
       <section className="space-y-1 text-sm">
         <h3 className="font-medium">Honest limitations</h3>

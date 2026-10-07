@@ -252,4 +252,6 @@ export const TOOL_LAUNCH: Record<string, { command: string; immediate?: boolean;
   extract: { command: 'pages.extract', hint: 'Open the PDF you want to extract pages from.' },
   delete: { command: 'pages.organizer', hint: 'Open the PDF – select pages in the organizer and delete them.' },
   reorder: { command: 'pages.organizer', hint: 'Open the PDF – drag pages to reorder them.' },
+  edit: { command: 'text.edit', hint: 'Open the PDF – click any text to edit it.' },
+  redact: { command: 'sec.redact', hint: 'Open the PDF – drag over the content you want to remove permanently.' },
 }

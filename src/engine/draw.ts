@@ -324,8 +324,13 @@ function drawStamp(env: DrawEnv, o: StampObj) {
 
 function drawImage(env: DrawEnv, o: ImageObj) {
   const img = env.imageCache.get(`image:${o.id}`)
-  if (!img) return
   const { page } = env
+  // an image moved from its original spot in the PDF: hide the original first
+  if (o.cover) {
+    const r = baseRectToPdf(env.pl, o.cover.rect)
+    page.drawRectangle({ x: r.x, y: r.y, width: r.w, height: r.h, color: color(o.cover.color), borderWidth: 0 })
+  }
+  if (!img) return
   local(env, o, o.rotation, () => {
     const hw = o.w / 2
     const hh = o.h / 2

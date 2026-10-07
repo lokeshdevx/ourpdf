@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 import { COMMAND_HELP, FIELD_HELP } from '../src/features/command-help'
-import { FIX, clickPage, gotoEditor, openFiles, runCommand } from './helpers'
+import { FIX, gotoEditor, openFiles, runCommand } from './helpers'
 
 const VIEWPORTS: [string, number, number][] = [['320', 320, 640], ['phone', 390, 844], ['tablet', 768, 1024], ['small laptop', 1024, 700], ['laptop', 1366, 768], ['desktop', 1920, 1080]]
 const noOverflow = (page: Page) => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)

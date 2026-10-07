@@ -136,7 +136,7 @@ async function walk(node: Node, blocks: Block[]) {
       if (hasContent(t)) blocks.push({ type: 'quote', runs: t })
     } else if (tag === 'HR') {
       flush()
-      blocks.push({ type: 'hr' })
+      blocks.push(el.classList.contains('pagebreak') ? { type: 'pagebreak' } : { type: 'hr' })
     } else if (tag === 'TABLE') {
       flush()
       const rows: Run[][][] = []

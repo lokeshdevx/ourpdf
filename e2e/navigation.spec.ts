@@ -14,7 +14,7 @@ test.describe('navigation lands where you expect @cross', () => {
     await expect.poll(() => scrollY(page), { timeout: 1500 }).toBeLessThan(120)
     await page.goto('/')
     await page.evaluate(() => window.scrollTo({ top: 1500, behavior: 'instant' }))
-    const link = page.locator('a[href="/merge-pdf"]').first()
+    const link = page.locator('main a[href="/merge-pdf"]').first()
     await link.scrollIntoViewIfNeeded()
     await link.click()
     await page.waitForURL('**/merge-pdf')
@@ -25,22 +25,20 @@ test.describe('navigation lands where you expect @cross', () => {
   test('in-page links keep their heading visible below the sticky header', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto('/')
-    await page.getByTestId('mobile-nav-trigger').click()
-    await page.getByTestId('mobile-nav').getByRole('link', { name: 'Tools' }).click()
-    await page.waitForFunction(() => location.hash === '#tools')
+    await page.getByRole('navigation', { name: 'Jump to category' }).getByRole('link', { name: 'Security & Privacy' }).click()
+    await page.waitForFunction(() => location.hash === '#security')
     // the page glides to the section and stops with its heading below the 64px sticky header
-    await expect.poll(() => page.locator('#tools').evaluate((e) => Math.round(e.getBoundingClientRect().top)), { timeout: 5000 }).toBeLessThan(200)
-    expect(await page.locator('#tools').evaluate((e) => e.getBoundingClientRect().top)).toBeGreaterThanOrEqual(56)
+    await expect.poll(() => page.locator('#security').evaluate((e) => Math.round(e.getBoundingClientRect().top)), { timeout: 5000 }).toBeLessThan(200)
+    expect(await page.locator('#security').evaluate((e) => e.getBoundingClientRect().top)).toBeGreaterThanOrEqual(56)
   })
 
   test('section links from another page also land on the section, below the header', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto('/features')
-    await page.getByTestId('mobile-nav-trigger').click()
-    await page.getByTestId('mobile-nav').getByRole('link', { name: 'FAQ' }).click()
-    await page.waitForURL('**/#faq')
-    await expect.poll(() => page.locator('#faq').evaluate((e) => Math.round(e.getBoundingClientRect().top)), { timeout: 6000 }).toBeLessThan(200)
-    expect(await page.locator('#faq').evaluate((e) => e.getBoundingClientRect().top)).toBeGreaterThanOrEqual(56)
+    await page.locator('footer a[href="/#business"]').click()
+    await page.waitForURL('**/#business')
+    await expect.poll(() => page.locator('#business').evaluate((e) => Math.round(e.getBoundingClientRect().top)), { timeout: 6000 }).toBeLessThan(200)
+    expect(await page.locator('#business').evaluate((e) => e.getBoundingClientRect().top)).toBeGreaterThanOrEqual(56)
   })
 
   test('the editor start screen is never clipped at the top, even on a very short phone screen', async ({ browser }) => {
@@ -58,9 +56,11 @@ test.describe('navigation lands where you expect @cross', () => {
     expect(geo.scrollTop).toBe(0)
     expect(geo.h1Top).toBeGreaterThan(0) // heading and hint are visible without scrolling
     await expect(page.getByTestId('onboarding-open')).toBeAttached()
-    // and the whole card can be reached by scrolling
-    await o.evaluate((el) => el.scrollTo({ top: el.scrollHeight, behavior: 'instant' }))
+    // and everything can be reached by scrolling: the Open button and, further down, the recent-PDFs panel
+    await page.getByTestId('onboarding-open').scrollIntoViewIfNeeded()
     await expect(page.getByTestId('onboarding-open')).toBeInViewport()
+    await o.evaluate((el) => el.scrollTo({ top: el.scrollHeight, behavior: 'instant' }))
+    await expect(page.getByTestId('recent-projects')).toBeInViewport()
     await ctx.close()
   })
 
@@ -76,10 +76,10 @@ test.describe('navigation lands where you expect @cross', () => {
   test('the interface uses the bundled UI typeface instead of the device font', async ({ page }) => {
     await page.goto('/')
     await page.evaluate(() => document.fonts.ready)
-    const r = await page.evaluate(() => ({ family: getComputedStyle(document.body).fontFamily, loaded: document.fonts.check('600 16px "Inter UI"') }))
-    expect(r.family).toContain('Inter UI')
+    const r = await page.evaluate(() => ({ family: getComputedStyle(document.body).fontFamily, loaded: document.fonts.check('600 16px "Jakarta UI"') }))
+    expect(r.family).toContain('Jakarta UI')
     expect(r.loaded).toBe(true)
     await gotoEditor(page)
-    expect(await page.evaluate(() => getComputedStyle(document.body).fontFamily)).toContain('Inter UI')
+    expect(await page.evaluate(() => getComputedStyle(document.body).fontFamily)).toContain('Jakarta UI')
   })
 })

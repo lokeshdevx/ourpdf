@@ -1,6 +1,8 @@
 import { expect, test, type Page } from '@playwright/test'
 
-const TOOLS = ['pdf-editor', 'merge-pdf', 'split-pdf', 'compress-pdf', 'pdf-to-jpg', 'jpg-to-pdf', 'pdf-to-png', 'ocr-pdf', 'sign-pdf', 'annotate-pdf', 'crop-pdf', 'watermark-pdf', 'rotate-pdf', 'extract-pdf-pages', 'delete-pdf-pages', 'reorder-pdf-pages']
+import { TOOLS as ALL } from '../src/tools/registry'
+
+const TOOLS = ALL.map((t) => t.slug)
 const PAGES = ['/', '/features', '/privacy', ...TOOLS.map((t) => `/${t}`)]
 
 async function meta(page: Page) {
@@ -61,7 +63,7 @@ test.describe('SEO @cross', () => {
     const home = JSON.parse((await page.locator('script[type="application/ld+json"]').first().textContent())!)['@graph']
     const types = home.map((n: { '@type': string }) => n['@type'])
     expect(types).toEqual(expect.arrayContaining(['WebSite', 'SoftwareApplication', 'FAQPage', 'ItemList']))
-    expect(home.find((n: { '@type': string }) => n['@type'] === 'SoftwareApplication').featureList.length).toBeGreaterThan(30)
+    expect(home.find((n: { '@type': string }) => n['@type'] === 'ItemList').itemListElement.length).toBe(TOOLS.length)
     await page.goto('/compress-pdf')
     const g = JSON.parse((await page.locator('script[type="application/ld+json"]').first().textContent())!)['@graph']
     expect(g.map((n: { '@type': string }) => n['@type'])).toEqual(expect.arrayContaining(['WebApplication', 'HowTo', 'FAQPage', 'BreadcrumbList']))
@@ -72,15 +74,6 @@ test.describe('SEO @cross', () => {
     expect(await page.locator('main section li').count()).toBeGreaterThan(280)
     for (const id of ['viewing', 'text', 'annotate', 'images', 'pages', 'forms', 'sign', 'ocr', 'search', 'security', 'convert', 'optimize', 'stamp', 'export', 'projects', 'productivity']) await expect(page.locator(`#${id}`)).toBeAttached()
     for (const t of ['Bates numbering', 'AES-256 password protection', 'Create searchable PDFs', 'Permanent redaction that removes underlying content', 'Edit existing text using the exact font embedded in the PDF', 'Works offline after the first visit']) await expect(page.getByText(t, { exact: false }).first()).toBeAttached()
-  })
-
-  test('every tool page also lists the full feature set and links to related tools', async ({ page }) => {
-    for (const t of TOOLS) {
-      await page.goto(`/${t}`)
-      expect(await page.locator('main li').count(), `${t} feature chips`).toBeGreaterThan(280)
-      expect(await page.locator('aside a[href^="/"]').count(), `${t} related`).toBeGreaterThanOrEqual(4)
-      await expect(page.locator('details').first()).toBeAttached()
-    }
   })
 
   test('no broken internal links anywhere (crawl)', async ({ page, request }) => {
@@ -100,7 +93,7 @@ test.describe('SEO @cross', () => {
     }
     // hash targets exist
     await page.goto('/')
-    for (const id of ['features', 'tools', 'privacy', 'faq', 'shortcuts']) await expect(page.locator(`#${id}`)).toBeAttached()
+    for (const id of ['tools', 'faq', 'pages', 'security']) await expect(page.locator(`#${id}`)).toBeAttached()
   })
 
   test('sitemap lists every page; OG image renders; robots allows crawling', async ({ request }) => {
@@ -140,8 +133,8 @@ test.describe('responsive marketing pages', () => {
         const over = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
         expect(over, `${path} at ${w}px`).toBeLessThanOrEqual(1)
         await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-        if (w < 768) await expect(page.getByTestId('mobile-nav-trigger')).toBeVisible()
-        else await expect(page.getByRole('navigation', { name: 'Main' })).toBeVisible()
+        if (w < 1024) await expect(page.getByTestId('mobile-nav-trigger')).toBeVisible()
+        else await expect(page.getByRole('navigation', { name: 'Tools' })).toBeVisible()
       }
       await ctx.close()
     })
@@ -154,8 +147,8 @@ test.describe('responsive marketing pages', () => {
     await page.getByTestId('mobile-nav-trigger').click()
     const nav = page.getByTestId('mobile-nav')
     await expect(nav).toBeVisible()
-    await expect(nav.getByRole('link', { name: 'Merge pdf' })).toBeVisible()
-    await nav.getByRole('link', { name: 'All features' }).click()
+    await expect(nav.getByRole('link', { name: 'Merge PDFs' })).toBeVisible()
+    await nav.getByRole('link', { name: 'Features' }).click()
     await expect(page).toHaveURL(/\/features$/)
     await expect(page.getByRole('heading', { level: 1 })).toContainText('feature list')
     await ctx.close()
@@ -165,7 +158,7 @@ test.describe('responsive marketing pages', () => {
     const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true })
     const page = await ctx.newPage()
     await page.goto('/')
-    for (const sel of ['[data-testid=hero-cta]', '[data-testid=theme-toggle]', '[data-testid=mobile-nav-trigger]']) {
+    for (const sel of ['[data-testid=tool-merge-pdf]', '[data-testid=theme-toggle]', '[data-testid=mobile-nav-trigger]']) {
       const b = (await page.locator(sel).boundingBox())!
       expect(Math.min(b.width, b.height), sel).toBeGreaterThanOrEqual(28)
     }

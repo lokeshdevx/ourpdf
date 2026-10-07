@@ -24,10 +24,14 @@ const options = {
   legalComments: 'none',
 }
 
+// The AI worker is an ES module worker (Transformers.js loads the ONNX runtime with dynamic import()).
+const aiOptions = { ...options, entryPoints: { 'ai.worker': join(root, 'src/workers/ai.worker.ts') }, format: 'esm', logLevel: 'warning' }
+
 if (watch) {
   const ctx = await context(options)
-  await ctx.watch()
+  const ai = await context(aiOptions)
+  await Promise.all([ctx.watch(), ai.watch()])
   console.log('watching workers…')
 } else {
-  await build(options)
+  await Promise.all([build(options), build(aiOptions)])
 }

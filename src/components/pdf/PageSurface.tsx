@@ -65,12 +65,12 @@ export function PageSurface({ page, zoom, content, overlay, className, style, ou
     <div
       ref={outerRef}
       data-page={dataPage}
-      className={`${paper ? 'pdf-page-paper' : ''} relative overflow-hidden ${className ?? ''}`}
+      className={`${paper ? 'pdf-page-paper' : ''} relative overflow-clip ${className ?? ''}`}
       style={{ width: d.w * zoom, height: d.h * zoom, ...style }}
     >
       <div style={{ position: 'absolute', left: 0, top: 0, width: fw, height: fh, transformOrigin: '0 0', transform: rotationTransform(page.rotation, fw, fh) }}>
         {/* crop clip */}
-        <div style={{ position: 'absolute', left: f.x * zoom, top: f.y * zoom, width: c.w * f.s * zoom, height: c.h * f.s * zoom, overflow: 'hidden', background: '#fff' }}>
+        <div style={{ position: 'absolute', left: f.x * zoom, top: f.y * zoom, width: c.w * f.s * zoom, height: c.h * f.s * zoom, overflow: 'clip', background: '#fff' }}>
           <div style={{ ...baseStyle, left: -c.x * f.s * zoom, top: -c.y * f.s * zoom }}>{content}</div>
         </div>
         {overlay && <div className="obj-layer" style={{ ...baseStyle, ['--k' as string]: k }}>{overlay}</div>}

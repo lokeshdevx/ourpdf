@@ -32,7 +32,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning className="h-full antialiased" data-scroll-behavior="smooth">
       <head>
-        {[400, 600, 700].map((w) => <link key={w} rel="preload" href={`/fonts/inter-${w}-normal.woff`} as="font" type="font/woff" crossOrigin="anonymous" />)}
+        {/* Catch the browser's install offer before React loads, so the Install app button can use it later. */}
+        <script dangerouslySetInnerHTML={{ __html: "window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();window.__ourpdfInstall=e;window.dispatchEvent(new Event('ourpdf:installable'))});window.addEventListener('appinstalled',function(){window.__ourpdfInstall=null;window.__ourpdfInstalled=true;window.dispatchEvent(new Event('ourpdf:installable'))});" }} />
+        {[400, 600, 700].map((w) => <link key={w} rel="preload" href={`/fonts/jakarta-${w}.woff2`} as="font" type="font/woff2" crossOrigin="anonymous" />)}
       </head>
       <body className="min-h-full flex flex-col">
         <ThemeProvider>

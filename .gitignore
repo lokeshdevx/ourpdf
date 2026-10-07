@@ -47,3 +47,5 @@ next-env.d.ts
 /test-results
 /playwright-report
 /public/workers
+/public/ort
+/public/models

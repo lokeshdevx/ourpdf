@@ -56,6 +56,11 @@ export function EditorShell() {
     }
   }, [launch, launched, active])
 
+  /* every newly opened document starts in Edit-text mode (objects and PDF images stay selectable and movable in it) */
+  useEffect(() => usePdfStore.subscribe((st, prev) => {
+    if (st.docs.length > prev.docs.length && useToolStore.getState().tool === 'select') useToolStore.getState().setTool('edit-text')
+  }), [])
+
   /* one-time setup */
   useEffect(() => {
     initMeasurer().then(() => useUiStore.getState().set({ measurerReady: true }))

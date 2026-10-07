@@ -28,7 +28,7 @@ export function DialogShell({ id, title, description, children, footer, size = '
           {description ? <DialogDescription>{description}</DialogDescription> : <DialogDescription className="sr-only">{title}</DialogDescription>}
         </DialogHeader>
         <div className="scroll-thin -mx-1 min-h-0 flex-1 space-y-4 overflow-y-auto px-1">{children}</div>
-        {footer && <DialogFooter className="gap-2 sm:gap-2">{footer}</DialogFooter>}
+        {footer && <DialogFooter>{footer}</DialogFooter>}
       </DialogContent>
     </Dialog>
   )

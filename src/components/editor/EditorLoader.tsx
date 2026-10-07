@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import dynamic from 'next/dynamic'
 
 const EditorShell = dynamic(() => import('./EditorShell').then((m) => m.EditorShell), {
@@ -12,5 +13,9 @@ const EditorShell = dynamic(() => import('./EditorShell').then((m) => m.EditorSh
 })
 
 export function EditorLoader() {
+  useEffect(() => {
+    // arriving from a website page (client-side navigation) with analytics loaded: reload the editor without it
+    if ((window as unknown as { clarity?: unknown }).clarity) window.location.reload()
+  }, [])
   return <EditorShell />
 }

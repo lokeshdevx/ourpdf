@@ -18,6 +18,7 @@ rmSync(pub('pdfjs'), { recursive: true, force: true })
 rmSync(pub('tesseract'), { recursive: true, force: true })
 rmSync(pub('tessdata'), { recursive: true, force: true })
 rmSync(pub('fonts'), { recursive: true, force: true })
+rmSync(pub('ort'), { recursive: true, force: true })
 
 // pdf.js
 mkdirSync(pub('pdfjs'), { recursive: true })
@@ -52,6 +53,15 @@ for (const fam of library) {
     faces++
   }
 }
+// handwriting fonts (Text / PDF to Handwriting)
+for (const id of ['caveat', 'homemade-apple', 'indie-flower', 'kalam', 'patrick-hand', 'shadows-into-light', 'gloria-hallelujah', 'reenie-beanie']) {
+  cpSync(nm('@fontsource', id, 'files', `${id}-latin-400-normal.woff2`), pub('fonts', `hand-${id}.woff2`))
+}
+// ONNX Runtime Web (on-device AI: Whisper, embeddings) – the single-threaded asyncify build
+mkdirSync(pub('ort'), { recursive: true })
+for (const f of ['ort-wasm-simd-threaded.asyncify.mjs', 'ort-wasm-simd-threaded.asyncify.wasm']) cpSync(nm('onnxruntime-web/dist', f), pub('ort', f))
+// UI typeface: Plus Jakarta Sans (OFL), self-hosted
+for (const w of [400, 500, 600, 700, 800]) cpSync(nm('@fontsource/plus-jakarta-sans/files', `plus-jakarta-sans-latin-${w}-normal.woff2`), pub('fonts', `jakarta-${w}.woff2`))
 // the UI typeface (Inter) also needs the heavy weights the library does not ship
 for (const w of [800, 900]) cpSync(nm('@fontsource/inter/files', `inter-latin-${w}-normal.woff`), pub('fonts', `inter-${w}-normal.woff`))
 console.log(`assets copied to /public (pdfjs, tesseract, tessdata, ${faces} font faces)`)

@@ -203,6 +203,8 @@ export interface ImageObj extends ObjBase {
   crop: Rect | null
   /** JPEG quality (0..1) used when the image is embedded on export; 1 = lossless PNG. */
   quality: number
+  /** For an image picked up from the PDF itself: hides its original spot (base space, page background colour). */
+  cover?: { rect: Rect; color: string } | null
 }
 
 export interface RedactObj extends ObjBase {

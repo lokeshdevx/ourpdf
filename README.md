@@ -36,6 +36,35 @@ npm run build && npm run test:e2e    # Playwright against the production build
 Playwright projects: `chromium` (all specs), `firefox` and `webkit` (specs tagged `@cross`), `mobile` (Pixel 7,
 `@mobile`). Firefox/WebKit need their browsers and system libraries installed (`npx playwright install --with-deps`).
 
+### Optional on-device AI models
+
+`npm run models` downloads Whisper (speech → text, ~75 MB) and MiniLM (sentence embeddings, ~22 MB) into
+`public/models/` (git-ignored). They are served from this origin like every other asset – the browser never contacts a
+model hub. Without them, **Audio → PDF** shows a notice and **Chat with PDF** falls back to keyword (BM25) retrieval.
+
+## Standalone tools (`/tools`)
+
+67 focused tools live at `/tools/<slug>` (hub with search at `/tools`). The registry in `src/tools/registry.ts` is the
+single source of truth for the hub, landing page, sitemap and service-worker precache. A few entries (Organize, Edit,
+Sign, Redact, OCR) open the full editor via `/editor?tool=…`; the rest are standalone pages:
+
+```
+src/tools/
+  registry.ts          tool list + categories
+  lib/                 pure, browser-side logic on PDF bytes (pdf-lib + pdf.js), each unit-tested where possible:
+                       pages (merge/interleave/split by text·bookmarks·size·half/flip/n-up/crop), stamp (watermark,
+                       page numbers, headers, Bates), security (AES encrypt/decrypt, metadata, flatten, repair),
+                       raster (colour modes, burned-in redaction), pii (+ Verhoeff/Luhn), extract (images, tables,
+                       HTML), docx/pptx/epub/xlsx-render writers & readers, markdown, nlp (TextRank, BM25), hash (MD5),
+                       handwriting, scan (corner detection + perspective warp), invoice/receipt/india (GST), p2p (WebRTC)
+  ui/kit.tsx           shared inputs, file drop, progress, results (download / ZIP)
+  ui/tools/*.tsx       one screen per tool, code-split through ui/ToolLoader.tsx
+src/workers/ai.worker.ts   Transformers.js (Whisper, MiniLM) – ES-module worker bundled by scripts/build-workers.mjs
+```
+
+Notes: P2P share / whiteboard use WebRTC with manual (copy-paste / link-fragment) signalling and an *optional* public
+STUN server; Scan Document and Thumbmark need `camera=(self)` in Permissions-Policy (set in `next.config.ts`).
+
 ## Architecture
 
 ```

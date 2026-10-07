@@ -150,7 +150,9 @@ function TextBody({ o, page, tokens, editing, onCommitText, onLiveText }: Object
             ...common,
             padding: TEXT_PAD,
             whiteSpace: o.noWrap ? 'pre' : 'pre-wrap',
-            overflow: o.noWrap ? 'visible' : undefined,
+            // never scrollbars: single-line edits grow with the text instead (field-sizing), wrapped ones are clipped
+            overflow: 'hidden',
+            ...(o.noWrap ? { width: 'auto', minWidth: '100%', fieldSizing: 'content' } as React.CSSProperties : {}),
             textAlign: o.align === 'justify' ? 'left' : o.align,
             // edited existing text is drawn over its own cover, so the field itself stays see-through
             background: o.cover ? 'transparent' : 'rgb(255 255 255 / 0.9)',
@@ -314,6 +316,8 @@ function ImageBody({ o }: { o: ImageObj }) {
   const crop = o.crop
   const flip = `scale(${o.flipH ? -1 : 1}, ${o.flipV ? -1 : 1})`
   return (
+    <>
+    {o.cover && <div aria-hidden style={{ position: 'absolute', left: o.cover.rect.x - o.x, top: o.cover.rect.y - o.y, width: o.cover.rect.w, height: o.cover.rect.h, background: o.cover.color, transform: o.rotation ? `rotate(${-o.rotation}deg)` : undefined, pointerEvents: 'none' }} />}
     <div style={{ position: 'absolute', inset: 0, opacity: o.opacity, overflow: 'hidden', transform: flip, pointerEvents: 'none' }}>
       {url ? (
          
@@ -336,6 +340,7 @@ function ImageBody({ o }: { o: ImageObj }) {
         <div className="flex h-full w-full items-center justify-center bg-muted text-[10px] text-muted-foreground">Image missing</div>
       )}
     </div>
+    </>
   )
 }
 

@@ -66,7 +66,7 @@ export function PageOverlay({ page, index, zoom, outerRef }: Props) {
   useEffect(() => () => dragRef.current?.(), [])
 
   const startMove = (e: React.PointerEvent, o: EditObject) => {
-    if (tool !== 'select' || e.button !== 0) return
+    if ((tool !== 'select' && tool !== 'edit-text') || e.button !== 0) return
     const target = e.target as HTMLElement
     if (target.closest('input,textarea,select,button') && formMode === 'fill' && o.type === 'field') return
     if (target.closest('textarea')) return
@@ -109,6 +109,8 @@ export function PageOverlay({ page, index, zoom, outerRef }: Props) {
       const patch = useDraftStore.getState().patches
       useDraftStore.getState().clear()
       if (moved && Object.keys(patch).length) updateObjects(docId, patch, movable.length > 1 ? 'Move objects' : 'Move object', `move:${movable.map((m) => m.id).join()}`)
+      // in Edit-text mode a plain click on a text object opens it for typing (dragging still moves it)
+      else if (!moved && tool === 'edit-text' && o.type === 'text' && !o.locked && ids.length === 1) useSelectionStore.getState().setEditing(o.id)
     }
     dragRef.current = finish
     window.addEventListener('pointermove', onMove)
@@ -198,7 +200,7 @@ export function PageOverlay({ page, index, zoom, outerRef }: Props) {
   )
 
   const layerLocked = (o: EditObject) => layerState.get(o.layerId)?.locked
-  const interactiveTool = tool === 'select'
+  const interactiveTool = tool === 'select' || tool === 'edit-text'
   const selectedHere = pageObjs.filter((o) => selected.includes(o.id))
   const singleSel = selectedHere.length === 1 && selected.length === 1 ? selectedHere[0] : null
   const frame = effectiveFrame(page)
@@ -207,6 +209,9 @@ export function PageOverlay({ page, index, zoom, outerRef }: Props) {
   return (
     <>
       <SearchHighlights pageId={page.id} />
+      {/* Edit text sits underneath the objects: text is edited by clicking it, objects stay selectable and movable */}
+      {tool === 'edit-text' && <EditTextLayer page={page} zoom={zoom} toBase={toBase} outerRef={outerRef} />}
+      {(tool === 'select' || tool === 'edit-text') && <ImageGrabLayer page={page} outerRef={outerRef} startMove={startMove} />}
       {pageObjs.map((raw) => {
         const o = patches[raw.id] ? ({ ...raw, ...patches[raw.id] } as EditObject) : raw
         const isEditing = editingId === o.id
@@ -216,7 +221,7 @@ export function PageOverlay({ page, index, zoom, outerRef }: Props) {
             key={o.id}
             onPointerDown={(e) => startMove(e, o)}
             onDoubleClick={(e) => {
-              if (tool !== 'select' || layerLocked(o) || o.locked) return
+              if ((tool !== 'select' && tool !== 'edit-text') || layerLocked(o) || o.locked) return
               e.stopPropagation()
               if (o.type === 'text') useSelectionStore.getState().setEditing(o.id)
               if (o.type === 'link') useUiStore.getState().openDialog('link', { objectId: o.id })
@@ -255,7 +260,6 @@ export function PageOverlay({ page, index, zoom, outerRef }: Props) {
       })()}
 
       {CREATION_TOOLS.has(tool) && <CreationLayer key={tool} page={page} zoom={zoom} toBase={toBase} objects={pageObjs} />}
-      {tool === 'edit-text' && <EditTextLayer page={page} zoom={zoom} toBase={toBase} outerRef={outerRef} />}
       {tool === 'crop' && <CropLayer page={page} zoom={zoom} toBase={toBase} />}
       {MARKUP_TOOLS.has(tool) && <MarkupCapture page={page} zoom={zoom} toBase={toBase} area={markupMode === 'area'} outerRef={outerRef} />}
     </>
@@ -281,3 +285,4 @@ function SearchHighlights({ pageId }: { pageId: string }) {
 }
 
 import { MarkupCapture } from './MarkupCapture'
+import { ImageGrabLayer } from './ImageGrabLayer'

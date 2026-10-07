@@ -4,6 +4,7 @@ import { getObjects, useAnnotationStore, getLayers } from '@/stores/annotation-s
 import { usePdfStore } from '@/stores/pdf-store'
 import type { CommandScope } from '@/stores/history-store'
 import { execute } from '@/services/history'
+import { getPages } from '@/stores/page-store'
 import { fitTextObject } from './font-fit'
 import type { EditObject, Layer } from '@/types'
 import { uid } from '@/utils/id'
@@ -50,9 +51,10 @@ export function updateObjects(docId: string, patches: Record<string, Partial<Edi
   run(docId, label, ops, scopeOf(touched), touched.map((o) => o.id), key)
   // text edited from "Edit existing text": keep drawing it with the original font when its glyphs allow, else the closest match
   for (const o of touched) {
-    if (o.type === 'text' && (o.fontSwap || o.noWrap) && 'text' in (patches[o.id] ?? {})) {
+    if (o.type === 'text' && (o.fontSwap || o.noWrap || o.cover) && 'text' in (patches[o.id] ?? {})) {
       const text = o.text
-      void fitTextObject(o).then((fix) => {
+      const pg = getPages(docId).find((p) => p.id === o.pageId)
+      void fitTextObject(o, { maxW: pg && !o.rotation ? pg.width - o.x - Math.min(Math.max(o.x, 18), 72) : undefined }).then((fix) => {
         const now = getObjects(docId).find((x) => x.id === o.id)
         if (fix && now && now.type === 'text' && now.text === text) updateObjects(docId, { [o.id]: fix }, label, key)
       })

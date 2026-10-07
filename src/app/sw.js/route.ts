@@ -1,6 +1,6 @@
 import { readdirSync, statSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
-import { SEO_PAGES } from '@/lib/seo-pages'
+import { STANDALONE } from '@/tools/registry'
 
 // Generated at request time from the actual build output, so the precache list always matches the deployed assets.
 export const dynamic = 'force-dynamic'
@@ -22,7 +22,7 @@ export function GET() {
   const pub: string[] = []
   walk(join(root, 'public/pdfjs'), '/pdfjs', pub, (f) => /\.(mjs|wasm|pfb|ttf|icc)$/.test(f) && !/cmaps/.test(f))
   walk(join(root, 'public/workers'), '/workers', pub, (f) => f.endsWith('.js'))
-  const pages = ['/', '/editor', '/offline', '/features', '/privacy', ...SEO_PAGES.map((p) => `/${p.slug}`), '/manifest.webmanifest', '/icon.png', '/logo-mark.png', '/icon-192.png', '/icon-512.png', '/tesseract/worker.min.js']
+  const pages = ['/', '/editor', '/offline', '/features', '/privacy', ...STANDALONE.map((t) => `/${t.slug}`), '/manifest.webmanifest', '/icon.png', '/logo-mark.png', '/icon-192.png', '/icon-512.png', '/tesseract/worker.min.js']
   const version = String(Date.now())
   const precache = [...new Set([...pages, ...assets, ...pub])]
 
