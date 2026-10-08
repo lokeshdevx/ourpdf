@@ -78,7 +78,8 @@ export function TopBar() {
         <SheetTrigger asChild>
           <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Open tools menu" data-testid="mobile-nav-trigger"><Menu className="size-5" /></Button>
         </SheetTrigger>
-        <SheetContent side="left" className="sidebar-blue w-[300px] border-0 p-0 pt-2 [&>button]:text-white" data-testid="mobile-nav">
+        {/* focus the panel, not the search box: no keyboard popping up on phones until you tap Search */}
+        <SheetContent side="left" className="sidebar-blue w-[300px] border-0 p-0 pt-2 outline-none [&>button]:text-white" data-testid="mobile-nav" onOpenAutoFocus={(e) => { e.preventDefault(); (e.currentTarget as HTMLElement).focus() }}>
           <SheetHeader className="px-4 pb-1"><SheetTitle className="text-left"><span className="flex items-center gap-2"><span className="grid size-8 place-items-center rounded-lg bg-white"><BrandMark size={22} /></span><span className="text-lg font-extrabold tracking-tight text-white">Our<span className="text-sky-200">PDF</span></span></span></SheetTitle></SheetHeader>
           <div className="h-[calc(100dvh-4rem)]"><SidebarNav onNavigate={() => setOpen(false)} /></div>
         </SheetContent>

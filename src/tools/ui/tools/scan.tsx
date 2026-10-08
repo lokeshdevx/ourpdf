@@ -203,7 +203,7 @@ export function ScanDocument() {
             <Select label="Page size" value={size} onChange={setSize} options={[['A4', 'A4'], ['Letter', 'US Letter'], ['Legal', 'US Legal'], ['fit', 'Same as scan']]} />
             <Segmented label="Quality" value={quality} onChange={setQuality} options={[['standard', 'Standard (smaller)'], ['high', 'High']]} />
           </Grid>
-          <div className="mt-4"><Note>Want selectable, searchable text? Open the result in <Link className="underline" href="/editor?tool=ocr">OCR</Link> after exporting.</Note></div>
+          <div className="mt-4"><Note>Want selectable, searchable text? Open the result in <Link className="underline" href="/ocr-pdf">OCR</Link> after exporting.</Note></div>
         </Panel>
       )}
       <RunBar task={task} label="Create PDF" disabled={!pages.length} onRun={async () => {

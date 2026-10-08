@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ChevronDown, Home, LayoutGrid, Search, ShieldCheck, Sparkles } from 'lucide-react'
+import { Blocks, ChevronDown, Home, LayoutGrid, Search, ShieldCheck, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { CATEGORIES, TOOLS, toolHref } from '@/tools/registry'
 import { ToolIcon } from '@/tools/ui/ToolIcon'
@@ -67,6 +67,7 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
             {item('/editor', 'Full PDF editor', <LayoutGrid className="size-4 shrink-0" aria-hidden />)}
             {item('/features', 'Features', <Sparkles className="size-4 shrink-0" aria-hidden />)}
             {item('/privacy', 'Privacy', <ShieldCheck className="size-4 shrink-0" aria-hidden />)}
+            {item('/other-tools', 'Other tools', <Blocks className="size-4 shrink-0" aria-hidden />)}
           </div>
         )}
         {CATEGORIES.map((c) => {

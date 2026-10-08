@@ -238,3 +238,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
 /* Plus Jakarta Sans has narrow word spaces: open them slightly on the website pages only.
    (Never inside the editor, where text must keep the PDF's exact metrics.) */
 .site-shell { word-spacing: 0.08em; }
+
+/* Swipeable horizontal strips (editor toolbars, tabs, bottom bar): no visible scrollbar */
+[role='toolbar'].scroll-thin, [role='tablist'].scroll-thin { scrollbar-width: none; }
+[role='toolbar'].scroll-thin::-webkit-scrollbar, [role='tablist'].scroll-thin::-webkit-scrollbar { display: none; }

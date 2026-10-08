@@ -22,7 +22,7 @@ export function GET() {
   const pub: string[] = []
   walk(join(root, 'public/pdfjs'), '/pdfjs', pub, (f) => /\.(mjs|wasm|pfb|ttf|icc)$/.test(f) && !/cmaps/.test(f))
   walk(join(root, 'public/workers'), '/workers', pub, (f) => f.endsWith('.js'))
-  const pages = ['/', '/editor', '/offline', '/features', '/privacy', ...STANDALONE.map((t) => `/${t.slug}`), '/manifest.webmanifest', '/icon.png', '/logo-mark.png', '/icon-192.png', '/icon-512.png', '/tesseract/worker.min.js']
+  const pages = ['/', '/editor', '/offline', '/features', '/privacy', '/other-tools', ...STANDALONE.map((t) => `/${t.slug}`), '/manifest.webmanifest', '/icon.png', '/logo-mark.png', '/icon-192.png', '/icon-512.png', '/tesseract/worker.min.js']
   const version = String(Date.now())
   const precache = [...new Set([...pages, ...assets, ...pub])]
 

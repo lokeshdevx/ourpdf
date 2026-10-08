@@ -31,7 +31,7 @@ const RESULT: Record<string, string> = {
 const SPECIFIC: Partial<Record<string, { q: string; a: string }[]>> = {
   'compress-pdf': [{ q: 'How much smaller will my PDF get?', a: 'Scanned and image-heavy PDFs often shrink by 50–80%. Text-only PDFs are usually already small; the tool tells you the real before/after size and never returns a bigger file.' }],
   'merge-pdf': [{ q: 'Is there a limit on the number of files?', a: 'No. Merge as many PDFs as your device’s memory allows. There is no watermark.' }],
-  'pdf-to-word': [{ q: 'Will the Word file keep the layout?', a: 'Headings, paragraphs, bold text and tables are rebuilt as editable Word content. Complex multi-column layouts are simplified. Scanned pages need OCR first to become editable.' }],
+  'pdf-to-word': [{ q: 'Will the Word file keep the layout?', a: 'Yes. Every line keeps its position, font, size, weight and colour, each page keeps its size, and images and graphics stay in place – while all text remains editable. A “Flowing text” mode rebuilds headings, paragraphs and tables instead. Scanned pages need OCR first to become editable.' }],
   'encrypt-pdf': [{ q: 'How strong is the encryption?', a: 'AES-256, the strongest standard PDF encryption, supported by Adobe Acrobat and all modern readers. AES-128 is available for older readers.' }],
   'auto-redact-pii': [{ q: 'Is the redaction permanent?', a: 'Yes. Pages with redactions are re-rendered with the black boxes burned in, and the original text underneath is removed from the file – not just covered.' }, { q: 'Does it work on a scanned Aadhaar card?', a: 'Yes. Pages without a text layer are read with on-device OCR, and Aadhaar numbers are validated with the official Verhoeff checksum.' }],
   'chat-with-pdf': [{ q: 'Is my document sent to ChatGPT or another AI service?', a: 'No. A small AI model runs inside your browser. Answers are quoted from your PDF with page references, so it cannot invent facts.' }],
@@ -49,7 +49,8 @@ function make(t: ToolDef): ToolSeo {
   const action = ACTION[t.slug] ?? 'Adjust the options – the defaults work for most files'
   const lower = name.charAt(0).toLowerCase() + name.slice(1)
   return {
-    title: `${name} – Free, Private & No Upload`,
+    // keyword first, the way people search: "merge pdf online free"
+    title: `${name} Online Free – No Upload`,
     description: [`${t.description.replace(/\.$/, '')}. Free, no sign-up, works offline – files never leave your device.`, `${t.description.replace(/\.$/, '')}. Free and private – nothing is uploaded.`, t.description].find((d) => d.length <= 200) ?? t.description.slice(0, 199),
     intro: `${t.description} OurPDF ${lower.startsWith('pdf') ? 'handles' : 'does'} this entirely inside your browser: nothing is uploaded, there is no account and no watermark.`,
     steps: [`${inputs}.`, `${action}.`, `${RESULT[t.category]}.`],

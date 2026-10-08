@@ -163,7 +163,7 @@ export function SplitByText() {
             <Toggle label="Split after the matching page" hint="The match ends a document instead of starting one" checked={after} onChange={setAfter} />
             <Toggle label="Name files after the matching line" checked={nameFromMatch} onChange={setNameFromMatch} />
           </Grid>
-          <Note>Works on the PDF’s text layer. For scans, run <Link className="underline" href="/editor?tool=ocr">OCR</Link> first.</Note>
+          <Note>Works on the PDF’s text layer. For scans, run <Link className="underline" href="/ocr-pdf">OCR</Link> first.</Note>
         </div>
       </Panel>
       <RunBar task={task} label="Find & split" disabled={!pdf.input || !phrase.trim()} onRun={async () => {

@@ -6,6 +6,7 @@ import { Copy } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { pdfToDocx } from '@/tools/lib/docx'
+import { pdfToDocxLayout } from '@/tools/lib/docx-layout'
 import { pdfToEpub } from '@/tools/lib/epub'
 import { extractImages, extractTables, pdfToHtmlSemantic, pdfToHtmlVisual } from '@/tools/lib/extract'
 import { allPageText, baseName, canvasBlob, closePdf, openPdfjs, parseRanges, renderPage } from '@/tools/lib/pdf'
@@ -17,6 +18,8 @@ import { Grid, NumberInput, Note, Panel, PdfPicker, Range, Results, RunBar, Segm
 
 export function PdfToWord() {
   const pdf = usePdfInput()
+  const [layout, setLayout] = useState<'exact' | 'flow'>('exact')
+  const [graphics, setGraphics] = useState(true)
   const [tables, setTables] = useState(true)
   const [scans, setScans] = useState(true)
   const [breaks, setBreaks] = useState(true)
@@ -26,16 +29,33 @@ export function PdfToWord() {
     <div className="space-y-6">
       <Panel title="PDF"><PdfPicker pdf={pdf} /></Panel>
       <Panel title="Options">
-        <Grid>
-          <Toggle label="Rebuild tables" hint="Columns of text become real Word tables" checked={tables} onChange={setTables} />
-          <Toggle label="Keep scanned pages as pictures" hint="Pages without text are inserted as images" checked={scans} onChange={setScans} />
-          <Toggle label="Page break after each PDF page" checked={breaks} onChange={setBreaks} />
-        </Grid>
-        <div className="mt-4"><Note>Headings, paragraphs, bold text and tables are recreated as editable Word content. For scanned PDFs, run <Link className="underline" href="/editor?tool=ocr">OCR</Link> first to get editable text.</Note></div>
+        <div className="space-y-4">
+          <Segmented label="Layout" value={layout} onChange={setLayout} options={[['exact', 'Same as the PDF'], ['flow', 'Flowing text']]} />
+          {layout === 'exact' ? (
+            <Grid>
+              <Toggle label="Keep images and graphics" hint="Pictures, lines and shading are placed behind the text" checked={graphics} onChange={setGraphics} />
+            </Grid>
+          ) : (
+            <Grid>
+              <Toggle label="Rebuild tables" hint="Columns of text become real Word tables" checked={tables} onChange={setTables} />
+              <Toggle label="Keep scanned pages as pictures" hint="Pages without text are inserted as images" checked={scans} onChange={setScans} />
+              <Toggle label="Page break after each PDF page" checked={breaks} onChange={setBreaks} />
+            </Grid>
+          )}
+          <Note>
+            {layout === 'exact'
+              ? 'Every line keeps its position, font, size, weight and colour, and each page keeps its size – the Word file looks like the PDF and all text stays editable.'
+              : 'Headings, paragraphs and tables are rebuilt as flowing Word content that is easy to edit and reflow.'}{' '}
+            For scanned PDFs, run <Link className="underline" href="/ocr-pdf">OCR</Link> first to get editable text.
+          </Note>
+        </div>
       </Panel>
       <RunBar task={task} label="Convert to Word" disabled={!pdf.input} onRun={async () => {
         const name = baseName(pdf.input!.file.name)
-        const r = await task.run((p) => pdfToDocx(pdf.input!.bytes, { title: name, tables, scannedAsImages: scans, pageBreaks: breaks, onProgress: p }), 'Converting')
+        const bytes = pdf.input!.bytes
+        const r = await task.run((p) => (layout === 'exact'
+          ? pdfToDocxLayout(bytes, { title: name, graphics, onProgress: p })
+          : pdfToDocx(bytes, { title: name, tables, scannedAsImages: scans, pageBreaks: breaks, onProgress: p })), 'Converting')
         if (r) setOut([{ name: `${name}.docx`, blob: r }])
       }} />
       <Results files={out} onReset={() => { setOut([]); pdf.reset() }} />
@@ -184,7 +204,7 @@ export function PdfToExcel() {
             <Toggle label="Convert numbers" hint="“1,234.50” and “₹500” become real numbers you can sum" checked={numbers} onChange={setNumbers} />
             <Toggle label="Only table rows" hint="Skip titles and paragraphs" checked={onlyTables} onChange={setOnlyTables} />
           </Grid>
-          <Note>Columns are detected from how the text lines up. For scanned statements, run <Link className="underline" href="/editor?tool=ocr">OCR</Link> first.</Note>
+          <Note>Columns are detected from how the text lines up. For scanned statements, run <Link className="underline" href="/ocr-pdf">OCR</Link> first.</Note>
         </div>
       </Panel>
       <RunBar task={task} label="Convert to Excel" disabled={!pdf.input} onRun={async () => {

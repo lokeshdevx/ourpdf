@@ -29,9 +29,9 @@ export function Onboarding({ hint }: { hint?: string }) {
     { id: 'images', icon: ImagePlus, title: 'Images to PDF', text: 'Turn photos into a PDF', run: () => open('imagesToPdf'), testid: 'onboarding-images' },
   ]
   return (
-    <div className="relative flex h-full flex-col overflow-y-auto overscroll-contain bg-gradient-to-b from-primary/[0.06] via-background to-violet-500/[0.06]" data-testid="onboarding">
+    <div className="relative flex h-full flex-col overflow-x-hidden overflow-y-auto overscroll-contain bg-gradient-to-b from-primary/[0.06] via-background to-violet-500/[0.06]" data-testid="onboarding">
       <div className="bg-grid pointer-events-none absolute inset-0 opacity-50" aria-hidden />
-      <div className="pointer-events-none absolute -top-32 left-1/4 size-[36rem] rounded-full bg-primary/10 blur-3xl" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden><div className="absolute -top-32 left-1/4 size-[min(36rem,120vw)] rounded-full bg-primary/10 blur-3xl" /></div>
       {/* m-auto centres short content but lets tall content start at the top and scroll (justify-center would clip the top on phones) */}
       <div className="relative m-auto grid w-full max-w-[1600px] gap-6 p-4 sm:p-8 lg:grid-cols-2 lg:gap-8 xl:px-12">
         {/* ---------------------------------------------------------- open */}

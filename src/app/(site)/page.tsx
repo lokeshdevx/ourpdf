@@ -6,13 +6,17 @@ import { SITE } from '@/lib/site'
 import { CATEGORIES, TOOLS, toolHref } from '@/tools/registry'
 import { ToolIcon } from '@/tools/ui/ToolIcon'
 
-const TITLE = `${SITE.name} – ${TOOLS.length} Free PDF Tools Online, Private & No Upload`
-const DESCRIPTION = `Merge, split, compress, convert, sign, redact, OCR and summarise PDFs – ${TOOLS.length} free tools that run in your browser. No upload, no sign-up, works offline.`
+const TITLE = `${SITE.name} – Free PDF Editor & ${TOOLS.length} PDF Tools Online (No Upload)`
+const DESCRIPTION = `Free online PDF editor: edit, merge, split, compress, convert, sign and OCR PDFs – ${TOOLS.length} free tools that run in your browser. No upload, no sign-up, works offline.`
+
+/** The tools most people come for – linked prominently from the hero (the links search engines pick as sitelinks). */
+const POPULAR: [string, string][] = [['edit-pdf', 'Edit PDF'], ['merge-pdf', 'Merge PDF'], ['compress-pdf', 'Compress PDF'], ['split-pdf', 'Split PDF'], ['pdf-to-word', 'PDF to Word'], ['sign-pdf', 'Sign PDF']]
+const BY_SLUG = new Map(TOOLS.map((t) => [t.slug, t]))
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
   description: DESCRIPTION,
-  keywords: ['pdf tools', 'free pdf tools online', 'merge pdf', 'compress pdf', 'pdf to word', 'split pdf', 'sign pdf', 'pdf editor', 'private pdf', 'pdf without upload', 'gst invoice'],
+  keywords: ['pdf editor', 'free pdf editor', 'online pdf editor', 'pdf tools', 'free pdf tools online', 'merge pdf', 'compress pdf', 'pdf to word', 'split pdf', 'sign pdf', 'pdf editor', 'private pdf', 'pdf without upload', 'gst invoice'],
   alternates: { canonical: '/' },
   openGraph: { title: TITLE, description: DESCRIPTION, url: '/', type: 'website', siteName: SITE.name },
   twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
@@ -38,8 +42,9 @@ export default function Home() {
   const ld = {
     '@context': 'https://schema.org',
     '@graph': [
-      { '@type': 'WebSite', name: SITE.name, url: SITE.url, description: DESCRIPTION, inLanguage: 'en' },
-      { '@type': 'Organization', name: SITE.name, url: SITE.url, logo: `${SITE.url}/logo.png` },
+      { '@type': 'WebSite', '@id': `${SITE.url}/#website`, name: SITE.name, alternateName: ['Our PDF', 'ourpdf.space'], url: SITE.url, description: DESCRIPTION, inLanguage: 'en', publisher: { '@id': `${SITE.url}/#org` } },
+      { '@type': 'Organization', '@id': `${SITE.url}/#org`, name: SITE.name, url: SITE.url, logo: `${SITE.url}/logo.png`, email: SITE.contactEmail },
+      { '@type': 'SiteNavigationElement', name: POPULAR.map(([, l]) => l), url: POPULAR.map(([slug]) => `${SITE.url}/${slug}`) },
       { '@type': 'SoftwareApplication', name: SITE.name, url: SITE.url, applicationCategory: 'BusinessApplication', operatingSystem: 'Any (web browser)', description: DESCRIPTION, isAccessibleForFree: true, offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
       { '@type': 'ItemList', name: 'PDF tools', itemListElement: TOOLS.map((t, i) => ({ '@type': 'ListItem', position: i + 1, url: `${SITE.url}${toolHref(t)}`, name: t.name })) },
       { '@type': 'FAQPage', mainEntity: FAQ.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
@@ -55,6 +60,15 @@ export default function Home() {
           <p className="inline-flex items-center gap-2 rounded-full border bg-background/70 px-3 py-1 text-xs font-semibold text-muted-foreground"><Lock className="size-3.5 text-primary" aria-hidden /> 100% private · runs in your browser</p>
           <h1 id="hero-h" className="mt-4 max-w-4xl text-balance text-4xl font-extrabold tracking-tight sm:text-5xl xl:text-6xl">Every PDF tool you need, <span className="bg-gradient-to-r from-primary to-violet-500 bg-clip-text text-transparent">without uploading a thing</span></h1>
           <p className="mt-4 max-w-2xl text-pretty text-lg text-muted-foreground">{TOOLS.length} free tools to merge, split, compress, convert, sign, protect and understand your documents. Pick a tool below to get started.</p>
+          <nav aria-label="Popular tools" className="mt-7" data-testid="popular-tools">
+            <h2 className="text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">Popular tools</h2>
+            <ul className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
+              {POPULAR.map(([slug, label]) => {
+                const t = BY_SLUG.get(slug)!
+                return <li key={slug}><Link href={toolHref(t)} className="flex h-11 items-center gap-2 rounded-xl border bg-background px-4 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 hover:border-primary hover:text-primary"><ToolIcon name={t.icon} className="size-4 shrink-0 text-primary" />{label}</Link></li>
+              })}
+            </ul>
+          </nav>
           <nav aria-label="Jump to category" className="mt-6 flex flex-wrap gap-2">
             {CATEGORIES.map((c) => <a key={c.id} href={`#${c.id}`} className="rounded-full border bg-background/80 px-3.5 py-1.5 text-sm font-medium backdrop-blur transition hover:border-primary hover:text-primary">{c.title}</a>)}
           </nav>

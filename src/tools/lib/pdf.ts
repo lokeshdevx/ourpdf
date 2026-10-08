@@ -56,8 +56,11 @@ export async function closePdf(doc: PdfJsDoc): Promise<void> {
   await doc.loadingTask.destroy()
 }
 
-/** Renders a page into a new canvas at `scale` (1 = 72 dpi). */
-export async function renderPage(page: PdfJsPage, scale: number, opts: { forms?: boolean; noText?: boolean } = {}): Promise<HTMLCanvasElement> {
+/**
+ * Renders a page into a new canvas at `scale` (1 = 72 dpi). `noText` leaves out the text; `'upright'` leaves out only
+ * horizontal text, so vertical and rotated labels stay in the picture.
+ */
+export async function renderPage(page: PdfJsPage, scale: number, opts: { forms?: boolean; noText?: boolean | 'upright' } = {}): Promise<HTMLCanvasElement> {
   const pdfjs = await loadPdfjs()
   const viewport = page.getViewport({ scale })
   const canvas = document.createElement('canvas')
@@ -67,8 +70,13 @@ export async function renderPage(page: PdfJsPage, scale: number, opts: { forms?:
     // pdf.js paints glyphs with fillText/strokeText: silencing them leaves only graphics and images (a clean
     // background to put editable text boxes on). getContext returns this same patched context to pdf.js.
     const ctx = canvas.getContext('2d')!
-    ctx.fillText = () => {}
-    ctx.strokeText = () => {}
+    const keep = (draw: CanvasRenderingContext2D['fillText']): CanvasRenderingContext2D['fillText'] => function (this: CanvasRenderingContext2D, ...args) {
+      if (opts.noText !== 'upright') return
+      const m = this.getTransform()
+      if (Math.abs(m.b) > 0.02 * Math.abs(m.a) || m.a <= 0) draw.apply(this, args)
+    }
+    ctx.fillText = keep(ctx.fillText)
+    ctx.strokeText = keep(ctx.strokeText)
   }
   await page.render({ canvas, viewport, background: '#ffffff', annotationMode: opts.forms === false ? pdfjs.AnnotationMode.DISABLE : pdfjs.AnnotationMode.ENABLE_FORMS }).promise
   return canvas
@@ -94,6 +102,10 @@ export interface TextRun {
   bold: boolean
   italic: boolean
   eol: boolean
+  /** pdf.js font id – resolves to the PDF's real font (name, bold, italic) via `page.commonObjs` after a render. */
+  fontId?: string
+  /** Not left-to-right horizontal on the page (vertical or upside-down text). */
+  rotated?: boolean
 }
 
 export interface PageText {
@@ -105,6 +117,9 @@ export interface PageText {
 }
 
 interface RawItem { str: string; transform: number[]; width: number; height: number; fontName: string; hasEOL: boolean }
+
+/** Synthetic italics: an upright font sheared by the text matrix (what browsers do when no italic face exists). */
+const slanted = (t: number[]) => Math.abs(t[1]) < 1e-3 * Math.abs(t[0]) && Math.abs(t[2]) > 0.1 * Math.abs(t[3])
 
 export async function pageText(page: PdfJsPage): Promise<PageText> {
   const pdfjs = await loadPdfjs()
@@ -119,7 +134,7 @@ export async function pageText(page: PdfJsPage): Promise<PageText> {
     const fam = `${raw.fontName} ${styles[raw.fontName]?.fontFamily ?? ''}`
     runs.push({
       str: raw.str, x: t[4], y: t[5] - size, w: raw.width, h: size, size, font: styles[raw.fontName]?.fontFamily ?? 'sans-serif',
-      bold: /bold|black|heavy|semibold/i.test(fam), italic: /italic|oblique/i.test(fam), eol: raw.hasEOL,
+      bold: /bold|black|heavy|semibold/i.test(fam), italic: /italic|oblique/i.test(fam) || slanted(t), rotated: Math.abs(t[1]) > 0.02 * Math.abs(t[0]) || t[0] <= 0, eol: raw.hasEOL, fontId: raw.fontName,
     })
   }
   return { width: viewport.width, height: viewport.height, runs, text: runsToText(runs) }

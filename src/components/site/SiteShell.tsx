@@ -3,7 +3,7 @@ import { Coffee, Mail } from 'lucide-react'
 import { BrandMark, Wordmark } from '@/components/brand'
 import { MadeInIndia } from '@/components/made-in-india'
 import { BackToTop } from '@/components/marketing/BackToTop'
-import { SITE } from '@/lib/site'
+import { OTHER_APPS, SITE } from '@/lib/site'
 import { CATEGORIES, TOOLS, toolHref } from '@/tools/registry'
 import { SidebarNav } from './SidebarNav'
 import { Clarity } from './Clarity'
@@ -43,6 +43,12 @@ function Footer() {
             <li><a href={`mailto:${SITE.contactEmail}`} className={`inline-flex items-center gap-2 ${linkCls}`} data-testid="footer-email"><Mail className="size-4 text-primary" aria-hidden /> {SITE.contactEmail}</a></li>
             <li className="text-muted-foreground"><MadeInIndia /></li>
           </ul>
+          <div>
+            <h2 className="text-sm font-semibold">More free tools</h2>
+            <ul className="mt-2 space-y-1.5 text-sm">
+              {OTHER_APPS.map((a) => <li key={a.id}><a href={a.url} target="_blank" rel="noopener" className={linkCls}>{a.name} <span className="text-xs">– {a.tagline.toLowerCase()}</span></a></li>)}
+            </ul>
+          </div>
         </div>
         {COLUMNS.map((col) => (
           <nav key={col.title} aria-label={col.title}>
@@ -60,6 +66,7 @@ function Footer() {
           {CATEGORIES.map((c) => <Link key={c.id} href={`/#${c.id}`} className={linkCls}>{c.title}</Link>)}
           <Link href="/features" className={linkCls}>Features</Link>
           <Link href="/privacy" className={linkCls}>Privacy & security</Link>
+          <Link href="/other-tools" className={linkCls}>Other tools</Link>
         </nav>
       </div>
 

@@ -112,6 +112,53 @@ test.describe('standalone PDF tools', () => {
     expect(await pageCount(back.bytes)).toBe(await pageCount(new Uint8Array(fs.readFileSync(FIX('sample.pdf')))))
   })
 
+  test('PDF → Word keeps the layout: page size, positions, fonts, colours and graphics', async ({ page }) => {
+    const { StandardFonts, rgb } = await import('pdf-lib')
+    const src = await PDFDocument.create()
+    const helv = await src.embedFont(StandardFonts.HelveticaBold)
+    const times = await src.embedFont(StandardFonts.TimesRoman)
+    const p = src.addPage([500, 700])
+    p.drawRectangle({ x: 0, y: 640, width: 500, height: 60, color: rgb(0.1, 0.3, 0.85) })
+    p.drawText('Invoice header', { x: 40, y: 660, size: 24, font: helv, color: rgb(1, 1, 1) })
+    p.drawText('Left column text', { x: 40, y: 600, size: 11, font: times })
+    p.drawText('Right column text', { x: 300, y: 600, size: 11, font: times, color: rgb(0.8, 0.1, 0.1) })
+    src.addPage([700, 500]).drawText('Landscape page', { x: 60, y: 440, size: 14, font: times })
+    const fs = await import('node:fs')
+    const tmp = test.info().outputPath('layout.pdf')
+    fs.writeFileSync(tmp, await src.save())
+
+    await open(page, 'pdf-to-word')
+    await expect(page.getByRole('radio', { name: 'Same as the PDF' })).toBeChecked()
+    await drop(page, [tmp])
+    await run(page)
+    const zip = await JSZip.loadAsync((await download(page)).bytes)
+    const xml = await zip.file('word/document.xml')!.async('string')
+    // one section per page, each the size of its PDF page (in twips)
+    expect(xml).toContain('<w:pgSz w:w="10000" w:h="14000"/>')
+    expect(xml).toContain('<w:pgSz w:w="14000" w:h="10000" w:orient="landscape"/>')
+    // lines are placed with exact heights, the columns sit on the same line at their PDF x positions
+    expect(xml).toContain('w:lineRule="exact"')
+    expect(xml).toMatch(/<w:tab w:val="left" w:pos="6000"\/>/)
+    expect(xml).toMatch(/<w:ind w:left="800"/)
+    expect(xml).toMatch(/Left column text<\/w:t><\/w:r><w:r><w:tab\/><\/w:r><w:r><w:rPr>[^]*?<w:color w:val="C[0-9A-F]1[0-9A-F]{3}"\/>[^]*?Right column text/)
+    // original fonts and styles (base-14 fonts map to their Office twins), white header text on the blue band
+    expect(xml).toMatch(/w:ascii="Arial"[^>]*\/><w:b\/>[^]*?<w:color w:val="FFFFFF"\/>[^]*?Invoice header/)
+    expect(xml).toContain('w:ascii="Times New Roman"')
+    // the band is kept as a page background behind the text
+    expect(xml).toContain('behindDoc="1"')
+    expect(Object.keys(zip.files).filter((f) => /^word\/media\/.+\.jpg$/.test(f))).toHaveLength(1)
+
+    // flowing mode still rebuilds plain paragraphs
+    await open(page, 'pdf-to-word')
+    await page.getByRole('radio', { name: 'Flowing text' }).click()
+    await expect(page.getByText('Rebuild tables')).toBeVisible()
+    await drop(page, [tmp])
+    await run(page)
+    const flow = await (await JSZip.loadAsync((await download(page)).bytes)).file('word/document.xml')!.async('string')
+    expect(flow).toContain('Left column text')
+    expect(flow).not.toContain('w:lineRule="exact"')
+  })
+
   test('PDF → JPG and extract text', async ({ page }) => {
     await open(page, 'pdf-to-jpg')
     await drop(page, [FIX('sample.pdf')])

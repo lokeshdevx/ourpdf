@@ -3,7 +3,7 @@ import { expect, test, type Page } from '@playwright/test'
 import { TOOLS as ALL } from '../src/tools/registry'
 
 const TOOLS = ALL.map((t) => t.slug)
-const PAGES = ['/', '/features', '/privacy', ...TOOLS.map((t) => `/${t}`)]
+const PAGES = ['/', '/features', '/privacy', '/other-tools', ...TOOLS.map((t) => `/${t}`)]
 
 async function meta(page: Page) {
   return page.evaluate(() => ({
@@ -96,6 +96,21 @@ test.describe('SEO @cross', () => {
     for (const id of ['tools', 'faq', 'pages', 'security']) await expect(page.locator(`#${id}`)).toBeAttached()
   })
 
+  test('home page links the popular tools from the hero and describes the site for search results', async ({ page }) => {
+    await page.goto('/')
+    const popular = page.getByTestId('popular-tools')
+    for (const [name, href] of [['Edit PDF', '/edit-pdf'], ['Merge PDF', '/merge-pdf'], ['Compress PDF', '/compress-pdf'], ['Split PDF', '/split-pdf'], ['PDF to Word', '/pdf-to-word'], ['Sign PDF', '/sign-pdf']]) {
+      await expect(popular.getByRole('link', { name, exact: true })).toHaveAttribute('href', href)
+    }
+    await expect(page).toHaveTitle(/Free PDF Editor/)
+    const ld = JSON.parse((await page.locator('script[type="application/ld+json"]').first().textContent())!)
+    const site = ld['@graph'].find((n: { '@type': string }) => n['@type'] === 'WebSite')
+    expect(site.alternateName).toContain('ourpdf.space')
+    expect(ld['@graph'].some((n: { '@type': string }) => n['@type'] === 'SiteNavigationElement')).toBe(true)
+    await page.goto('/merge-pdf')
+    await expect(page).toHaveTitle('Merge PDFs Online Free – No Upload | OurPDF')
+  })
+
   test('sitemap lists every page; OG image renders; robots allows crawling', async ({ request }) => {
     const sm = await (await request.get('/sitemap.xml')).text()
     for (const p of PAGES.filter((p) => p !== '/')) expect(sm, p).toContain(`https://ourpdf.space${p}`)
@@ -134,7 +149,7 @@ test.describe('responsive marketing pages', () => {
         expect(over, `${path} at ${w}px`).toBeLessThanOrEqual(1)
         await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
         if (w < 1024) await expect(page.getByTestId('mobile-nav-trigger')).toBeVisible()
-        else await expect(page.getByRole('navigation', { name: 'Tools' })).toBeVisible()
+        else await expect(page.getByRole('navigation', { name: 'Tools', exact: true })).toBeVisible()
       }
       await ctx.close()
     })
@@ -148,6 +163,15 @@ test.describe('responsive marketing pages', () => {
     const nav = page.getByTestId('mobile-nav')
     await expect(nav).toBeVisible()
     await expect(nav.getByRole('link', { name: 'Merge PDFs' })).toBeVisible()
+    // the search box is not focused on open (no keyboard popping up), but tapping it still works
+    const search = nav.getByPlaceholder('Find a tool…')
+    await expect(search).not.toBeFocused()
+    await expect(nav).toBeFocused()
+    await search.click()
+    await expect(search).toBeFocused()
+    await search.fill('merge')
+    await expect(nav.getByRole('link', { name: 'Merge PDFs' })).toBeVisible()
+    await search.fill('')
     await nav.getByRole('link', { name: 'Features' }).click()
     await expect(page).toHaveURL(/\/features$/)
     await expect(page.getByRole('heading', { level: 1 })).toContainText('feature list')

@@ -80,6 +80,21 @@ test.describe('site chrome', () => {
     await expect(page.locator('footer [data-testid=made-in-india]').first()).toBeVisible()
   })
 
+  test('other tools page lists Picut and OurCalc, reachable from the sidebar and footer', async ({ page }) => {
+    await page.goto('/')
+    await page.getByTestId('sidebar-nav').getByRole('link', { name: 'Other tools' }).click()
+    await page.waitForURL('**/other-tools')
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('More free tools')
+    for (const [id, url] of [['picut', 'https://picut.in'], ['ourcalc', 'https://ourcalc.space']]) {
+      const card = page.getByTestId(`other-app-${id}`)
+      await expect(card).toHaveAttribute('href', url)
+      await expect(card).toHaveAttribute('target', '_blank')
+    }
+    await expect(page.locator('footer a[href="/other-tools"]')).toHaveCount(1)
+    await expect(page.locator('footer a[href="https://picut.in"]')).toHaveCount(1)
+    await expect(page.locator('footer a[href="https://ourcalc.space"]')).toHaveCount(1)
+  })
+
   test('P2P invite links use the public site in production builds', async ({ page }) => {
     await page.goto('/p2p-file-share')
     await page.getByRole('button', { name: 'Create invite' }).click()
